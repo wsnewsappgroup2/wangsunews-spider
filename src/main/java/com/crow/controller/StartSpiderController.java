@@ -22,7 +22,7 @@ public class StartSpiderController {
     @Autowired
     ProxyIpMapper proxyIpMapper;
     */
-    @GetMapping("/")
+    @GetMapping("/spider")
     public String index() {
 
         /*
