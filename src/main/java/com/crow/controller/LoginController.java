@@ -12,8 +12,8 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.Map;
 
 /**
- * @Author 王衍庆
- * **/
+ * Created by 王衍庆
+ */
 
 @CrossOrigin
 @RestController

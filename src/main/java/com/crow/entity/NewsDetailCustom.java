@@ -1,9 +1,9 @@
-package com.crow.vo;
+package com.crow.entity;
 
 /**
  * 用于显示单个新闻页面的相关信息
  * **/
-public class NewsVO {
+public class NewsDetailCustom {
     private String label;
     private String title;
     private String newsId;

@@ -5,7 +5,7 @@ import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.crow.dao.NewsListMapper;
 import com.crow.entity.NewsList;
-import com.crow.vo.NewsVO;
+import com.crow.entity.NewsDetailCustom;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -35,7 +35,7 @@ public class NewsService {
 
     /**根据newsId获取**/
     public String getSingleNewById(String newsId){
-        NewsVO newsVO=newsListMapper.selectNewsDetailById(newsId);
+        NewsDetailCustom newsVO=newsListMapper.selectNewsDetailById(newsId);
 
         JSONObject response=new JSONObject();
         if(newsVO!=null){

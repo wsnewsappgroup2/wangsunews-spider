@@ -1,7 +1,7 @@
 package com.crow.dao;
 
 import com.crow.entity.NewsList;
-import com.crow.vo.NewsVO;
+import com.crow.entity.NewsDetailCustom;
 import org.apache.ibatis.annotations.*;
 import org.springframework.stereotype.Component;
 
@@ -38,5 +38,5 @@ public interface NewsListMapper {
     @Select("SELECT `label`,`title`,`news_id` AS newsId, `source`, `news_date` AS newsDate,`content`,`main_image` AS mainImage " +
             "FROM `content_detail` LEFT JOIN `news_list` ON `content_detail`.news_id=`news_list`.id " +
             "WHERE `news_id`=#{newsId}")
-    NewsVO selectNewsDetailById(@Param("newsId") String newsId);
+    NewsDetailCustom selectNewsDetailById(@Param("newsId") String newsId);
 }
