@@ -28,4 +28,10 @@ CREATE TABLE `comment_detail` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
-
+CREATE TABLE `user` (
+  `openid` VARCHAR(200) NOT NULL COLLATE utf8_unicode_ci NOT NULL,
+  `unionid` VARCHAR(200) DEFAULT NULL COLLATE utf8_unicode_ci,
+  `session_key` VARCHAR(200) COLLATE utf8_unicode_ci NOT NULL,
+  `username` VARCHAR(100) COLLATE utf8_unicode_ci NOT NULL,
+  PRIMARY KEY (`openid`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
