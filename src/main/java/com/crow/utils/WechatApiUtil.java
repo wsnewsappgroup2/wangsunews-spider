@@ -3,12 +3,10 @@ package com.crow.utils;
 
 public class WechatApiUtil {
     // 小程序 appid
-    // TODO: 填充appid
-    public static final String WX_APP_ID="XX";
+    public static final String WX_APP_ID="wxcf9def03ec2dce71";
 
     // 小程序 appsecret
-    // TODO：appsecret
-    public static final String WX_APP_SECRET="XX";
+    public static final String WX_APP_SECRET="035f1ad28e25dbb4a955f95292d8e17b";
 
     // 登录校验的时固定授权类型
     public static final String WX_GRANT_TYPE="authorization_code";

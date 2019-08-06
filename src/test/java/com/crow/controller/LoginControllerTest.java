@@ -23,7 +23,7 @@ public class LoginControllerTest {
     @Test
     public void testLogin() throws Exception {
         ResultActions response=mockMvc.perform(MockMvcRequestBuilders.post("/wsnews/login")
-                .param("code","XXX"));
+                .param("code","XXX","男"));
         System.out.println("xx");
     }
 }
