@@ -2,19 +2,24 @@ package com.crow.service;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
+import com.crow.dao.UserMapper;
 import com.crow.entity.User;
 import com.crow.utils.HttpClientUtil;
 import com.crow.utils.WechatApiUtil;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @Service
 public class LoginService {
 
+    @Autowired
+    UserMapper userMapper;
 
-    public User login(String code,String username){
+    public User login(String code,String username,String sex){
         // 向微信请求授权登录
         JSONObject validateResult= validateByWechat(code);
         // 依照不同的响应码做处理
@@ -24,18 +29,16 @@ public class LoginService {
             case 0:
                 // 授权请求成功
                 validateResult.put("username",username);
+                validateResult.put("sex",sex);
                 user= getUserByValidateResult(validateResult);
                 if(user!=null)
                     break;
             case 40029:
                 // 无效的临时登录凭证 code
-                // break;
             case -1:
                 // 系统繁忙，此时请开发者稍候再试
-                // break;
             case 45011:
                 // 频率限制，每个用户每分钟100次
-                // break;
             default:
                 // 异常响应码
                 break;
@@ -66,34 +69,24 @@ public class LoginService {
         String unionid=validateResult.getString("unionid");
 
         User user=null;
-        if(exists(openid)){
-            user=getUserByOpenId(openid);
-        }else{
+        // 尝试从数据库中获取
+        user=getUserByOpenId(openid);
+        if(user==null){
+            // 数据库中赞无用户
             user= JSON.toJavaObject(validateResult,User.class);
+            saveUserByValidateResult(user);
         }
         return user;
     }
 
-    /**判断用户是否在数据库中**/
-    private boolean exists(String openid){
-        // TODO: 完善判断语句
-        return false;
-    }
-
     /**从数据库中获取对应的用户信息**/
     private User getUserByOpenId(String openid){
-        // TODO:修改逻辑为正确逻辑并和dao层对接
-        User user=new User();
-        user.setOpenid("test_openid_123");
-        user.setSession_key("test_session_key_123");
-        user.setUnionid("test_unionid_123");
-        user.setUsername("test_username_123");
-        return user;
+        List<User> users=userMapper.getUser(openid);
+        return users.size()<=0? null:users.get(0);
     }
 
+    /**插入新的用户信息**/
     private void saveUserByValidateResult(User user){
-        // TODO:修改逻辑为正确逻辑并和dao层对接
-        System.out.println("Saved Successfully");
-        return;
+        userMapper.insert(user);
     }
 }

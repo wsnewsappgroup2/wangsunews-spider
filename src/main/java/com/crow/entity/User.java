@@ -9,6 +9,17 @@ public class User {
     private String unionid;
     // 用户名
     private String username;
+    // 用户性别
+    private String sex;
+
+    public String getSex() {
+        return sex;
+    }
+
+    public void setSex(String sex) {
+        this.sex = sex;
+    }
+
 
     public void setOpenid(String openid) {
         this.openid = openid;
