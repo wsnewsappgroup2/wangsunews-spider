@@ -83,7 +83,7 @@ public class HupuNBAPageProcessor implements PageProcessor {//修改改类，定
 //            page.addTargetRequest(url.substring(0,URL_LENGTH).concat((Integer.parseInt(url.substring(URL_LENGTH)) + 1) + ""));//把所有列表页加入抓取队列
 
 //        }
-
+        page.addTargetRequests(page.getHtml().xpath("/html/body/div[3]/div[1]/div[3]/a[@class='page-btn-prev']/@href").all());
 
     }
 
@@ -97,13 +97,13 @@ public class HupuNBAPageProcessor implements PageProcessor {//修改改类，定
         String title = page.getHtml().xpath("//div[@class='artical-title']//h1/text()").toString();
         //新闻来源
         String comFrom = page.getHtml().xpath("//span[@class='comeFrom']//a/text()").toString();
-
         //新闻内容
         String content = page.getHtml().xpath("/html/body/div[4]/div[1]/div[2]/div/div[2]/p/text()").all().toString();
         //新闻主图
         String mainImage = page.getHtml().xpath("/html/body/div[4]/div[1]/div[2]/div/div[1]/img/@src").toString();
         //新闻时间
-        String newsDate =  page.getHtml().xpath("//*[@id=\"pubtime_baidu\"]/text").toString();
+        String newsDate =  page.getHtml().xpath("//*[@id=\"pubtime_baidu\"]/text()").toString();
+
         setPost(title, content, comFrom, mainImage,newsDate,page);
 
 
@@ -151,12 +151,13 @@ public class HupuNBAPageProcessor implements PageProcessor {//修改改类，定
         post.setSource(source);
         post.setMainImage(mainImage);
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        Date newsdate = new Date();
+        Date newsdate= new Date();
         try {
             newsdate = sdf.parse(newsDate);
         }catch (Exception e){
-            System.out.println("Date Transfer Error");
+            System.out.println(e.getMessage());
         }
+        post.setNewsDate(newsdate);
 
 
         post.setNewsDate(newsdate);
