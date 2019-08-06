@@ -27,4 +27,5 @@ public class LoginController {
         // 用户登录
         return loginService.login(map.get("code"),map.get("username"),map.get("sex"));
     }
+
 }
