@@ -17,4 +17,10 @@ public interface UserMapper {
     @Select("SELECT * FROM `user` " +
             "WHERE openid = #{openid}")
     List<User> getUser(@Param("openid") String openid);
+
+    @Update("UPDATE `user` " +
+            "SET session_key= #{session_key} " +
+            "WHERE openid=#{openid}")
+    void updateSesssionKeyByOpenId(@Param("openid") String openId,
+                                   @Param("session_key") String sessionKey);
 }

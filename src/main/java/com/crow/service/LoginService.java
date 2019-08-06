@@ -19,31 +19,43 @@ public class LoginService {
     @Autowired
     UserMapper userMapper;
 
-    public User login(String code,String username,String sex){
+    public String login(String code,String username,String sex){
         // 向微信请求授权登录
         JSONObject validateResult= validateByWechat(code);
-        // 依照不同的响应码做处理
         int errorCode=validateResult.getIntValue("errcode");
         User user=null;
-        switch (errorCode){
-            case 0:
-                // 授权请求成功
-                validateResult.put("username",username);
-                validateResult.put("sex",sex);
-                user= getUserByValidateResult(validateResult);
-                if(user!=null)
-                    break;
-            case 40029:
-                // 无效的临时登录凭证 code
-            case -1:
-                // 系统繁忙，此时请开发者稍候再试
-            case 45011:
-                // 频率限制，每个用户每分钟100次
-            default:
-                // 异常响应码
-                break;
+
+        if(errorCode==0){
+            // 授权请求成功
+            validateResult.put("username",username);
+            validateResult.put("sex",sex);
+            user= getUserByValidateResult(validateResult);
         }
-        return user;
+
+        JSONObject validateResponse=new JSONObject();
+        if(user!=null){
+            // 登录授权成功响应
+            validateResponse.put("msg","Login Successfully --- Wechat User: "+username);
+            validateResponse.put("open_id",user.getOpenid());
+            validateResponse.put("success",true);
+        }else{
+            switch (errorCode){
+                case 40029:
+                    // 无效的临时登录凭证 code
+                case -1:
+                    // 系统繁忙，此时请开发者稍候再试
+                case 45011:
+                    // 频率限制，每个用户每分钟100次
+                default:
+                    // 异常响应码
+                    break;
+            }
+            // 登录授权失败响应
+            validateResponse.put("msg","Login Failed --- Wechat User: "+username+"Error Code: "+errorCode);
+            validateResponse.put("open_id",null);
+            validateResponse.put("success",false);
+        }
+        return validateResponse.toJSONString();
     }
 
 
@@ -65,14 +77,15 @@ public class LoginService {
     /**获取授权的用户信息，如果是初次使用则会先保存用户信息**/
     private User getUserByValidateResult(JSONObject validateResult){
         String openid=validateResult.getString("openid");
-        String session_key=validateResult.getString("session_key");
-        String unionid=validateResult.getString("unionid");
 
-        User user=null;
         // 尝试从数据库中获取
+        User user=null;
         user=getUserByOpenId(openid);
-        if(user==null){
-            // 数据库中赞无用户
+
+        // 存在用户则更新session_key否则插入新的用户
+        if(user!=null){
+            userMapper.updateSesssionKeyByOpenId(openid,validateResult.getString("session_key"));
+        }else{
             user= JSON.toJavaObject(validateResult,User.class);
             saveUserByValidateResult(user);
         }
