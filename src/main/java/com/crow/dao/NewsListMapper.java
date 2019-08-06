@@ -10,4 +10,9 @@ public interface NewsListMapper {
     @Options(useGeneratedKeys = true, keyProperty = "id")
     @Insert("insert into news_list (`label`,`source`,`main_image`,`title`,`create_date`,`news_date`) values(#{label},#{source},#{mainImage},#{title},#{createDate},#{newsDate})")
     void insert(NewsList newsList);
+
+    @Options(useGeneratedKeys = true, keyProperty = "id")
+    @Insert("insert into news_list (`label`,`source`,`main_image`,`title`,`create_date`,`source_comment_num`,`topic_word`) values(#{label},#{source},#{mainImage},#{title},#{createDate},#{newsDate}),#{sourceCommentNum}),#{topicWord})")
+    void insertSinaEnt(NewsList newsList);
+
 }

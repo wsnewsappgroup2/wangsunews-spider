@@ -13,6 +13,8 @@ public class Post {
     private String source;
     private String mainImage;
     private Date newsDate;
+    private String sourceCommentNum;
+    private String topicWord;
 
     public int getId() {
         return id;
@@ -60,5 +62,21 @@ public class Post {
 
     public void setNewsDate(Date newsDate) {
         this.newsDate = newsDate;
+    }
+
+    public String getSourceCommentNum() {
+        return sourceCommentNum;
+    }
+
+    public void setSourceCommentNum(String sourceCommentNum) {
+        this.sourceCommentNum = sourceCommentNum;
+    }
+
+    public String getTopicWord() {
+        return topicWord;
+    }
+
+    public void setTopicWord(String topicWord) {
+        this.topicWord = topicWord;
     }
 }
