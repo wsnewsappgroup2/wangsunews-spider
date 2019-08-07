@@ -35,8 +35,9 @@ public interface NewsListMapper {
             @Param("start") Integer start,
             @Param("limit")Integer limit);
 
-    @Select("SELECT `label`,`title`,`news_id` AS newsId, `source`, `news_date` AS newsDate,`content`,`main_image` AS mainImage " +
+    @Select("SELECT `label`,`title`,`news_id` AS newsId, `source`, `news_date` AS newsDate,`content`,`main_image` AS mainImage, `content_type` AS contentType, `index_id` AS indexId" +
             "FROM `content_detail` LEFT JOIN `news_list` ON `content_detail`.news_id=`news_list`.id " +
-            "WHERE `news_id`=#{newsId}")
-    NewsDetailCustom selectNewsDetailById(@Param("newsId") String newsId);
+            "WHERE `news_id`=#{newsId} " +
+            "ORDER BY `index_id` ASC")
+    List<NewsDetailCustom> selectNewsDetailById(@Param("newsId") String newsId);
 }

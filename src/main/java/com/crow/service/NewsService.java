@@ -35,11 +35,11 @@ public class NewsService {
 
     /**根据newsId获取**/
     public String getSingleNewById(String newsId){
-        NewsDetailCustom newsVO=newsListMapper.selectNewsDetailById(newsId);
+        List<NewsDetailCustom> newsDetailCustoms=newsListMapper.selectNewsDetailById(newsId);
 
         JSONObject response=new JSONObject();
-        if(newsVO!=null){
-            response.put("data",newsVO);
+        if(newsDetailCustoms!=null){
+            response.put("data",newsDetailCustoms);
             response.put("status","success");
             response.put("code","success");
         }else{
