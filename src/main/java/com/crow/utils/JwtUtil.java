@@ -84,7 +84,7 @@ public class JwtUtil {
      * @param telNo  电话
      * @return 加密的token
      */
-    public static String sign(String openid, String telNo) throws Exception {
+    public static String sign(String openid) throws Exception {
         try {
 
             String encryptJWTKey = "encryptJWTKey";
@@ -95,7 +95,7 @@ public class JwtUtil {
             Algorithm algorithm = Algorithm.HMAC256(secret);
             // 附带username,hotel信息
             return JWT.create()
-                    .withClaim("openid", openid).withClaim("telNo", telNo)
+                    .withClaim("openid", openid)
                     .withExpiresAt(date)
                     .sign(algorithm);
         }catch (UnsupportedEncodingException e) {

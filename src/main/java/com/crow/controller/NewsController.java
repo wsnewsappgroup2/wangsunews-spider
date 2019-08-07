@@ -6,6 +6,7 @@ import org.springframework.web.bind.annotation.*;
 
 /**
  * Created by 王衍庆
+ * Changed by wuy2 2019.8.7
  */
 @CrossOrigin
 @RestController
