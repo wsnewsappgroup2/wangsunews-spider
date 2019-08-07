@@ -15,8 +15,12 @@ public interface NewsListMapper {
     void insert(NewsList newsList);
 
     @Options(useGeneratedKeys = true, keyProperty = "id")
-    @Insert("insert into news_list (`label`,`source`,`main_image`,`title`,`create_date`,`source_comment_num`,`topic_word`) values(#{label},#{source},#{mainImage},#{title},#{createDate},#{newsDate}),#{sourceCommentNum}),#{topicWord})")
+    @Insert("insert into news_list (`label`,`source`,`main_image`,`title`,`create_date`,`news_date`，`source_comment_num`,`topic_word`) values(#{label},#{source},#{mainImage},#{title},#{createDate},#{newsDate}),#{sourceCommentNum}),#{topicWord})")
     void insertSinaEnt(NewsList newsList);
+    @Options(useGeneratedKeys = true, keyProperty = "id")
+    @Insert("insert into news_list (`label`,`source`,`main_image`,`title`,`create_date`,`news_date`,`source_comment_num`) values(#{label},#{source},#{mainImage},#{title},#{createDate},#{newsDate},#{sourceCommentNum})")
+    void insertTest(NewsList newsList);
+
 
     @Select("SELECT * FROM news_list " +
             "WHERE label=#{label} " +

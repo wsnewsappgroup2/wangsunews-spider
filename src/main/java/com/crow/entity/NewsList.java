@@ -10,7 +10,7 @@ public class NewsList {
     private String title;
     private Date createDate;
     private Date newsDate;
-    private String sourceCommentNum;
+    private int sourceCommentNum;
     private String topicWord;
 
     public int getId() {
@@ -69,12 +69,13 @@ public class NewsList {
         this.newsDate = newsDate;
     }
 
-    public String getSourceCommentNum() {
+    public int getSourceCommentNum() {
         return sourceCommentNum;
     }
 
-    public void setSourceCommentNum(String sourceCommentNum) {
+    public void setSourceCommentNum(int sourceCommentNum) {
         this.sourceCommentNum = sourceCommentNum;
+
     }
 
     public String getTopicWord() {
