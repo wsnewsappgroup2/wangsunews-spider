@@ -1,5 +1,9 @@
 package com.crow.result;
 
+/**
+ * Created by wangyq1
+ * 通用的响应Result类
+ */
 public class CommonResult<T> {
     private String success;
     private String code;

@@ -12,6 +12,9 @@ import org.springframework.test.context.junit4.SpringRunner;
 import java.util.Date;
 import java.util.List;
 
+/**
+ * Created by wangyq1
+ */
 @RunWith(SpringRunner.class)
 @SpringBootTest
 public class NewsServiceTest {
