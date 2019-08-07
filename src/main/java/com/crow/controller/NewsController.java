@@ -18,7 +18,7 @@ import java.util.List;
 public class NewsController {
 
     @Autowired
-    NewsService newsService;
+    private NewsService newsService;
 
     /**推荐新闻列表**/
     @GetMapping(value = "/wsnews/news_recommend/{column}/{page}/{pagesize}")
