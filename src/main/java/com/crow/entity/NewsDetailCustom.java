@@ -12,6 +12,25 @@ public class NewsDetailCustom {
     private String content;
     private String mainImage;
 
+    private String contentType;
+    private String indexId;
+
+    public String getContentType() {
+        return contentType;
+    }
+
+    public void setContentType(String contentType) {
+        this.contentType = contentType;
+    }
+
+    public String getIndexId() {
+        return indexId;
+    }
+
+    public void setIndexId(String indexId) {
+        this.indexId = indexId;
+    }
+
     public String getLabel() {
         return label;
     }
