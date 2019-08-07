@@ -1,16 +1,28 @@
 package com.crow.entity;
 
+import com.alibaba.fastjson.annotation.JSONField;
+
 import java.util.Date;
 
 public class NewsList {
     private int id;
+
     private String label;
+
     private String source;
+
     private String mainImage;
+
     private String title;
+
     private Date createDate;
+
+    @JSONField(name = "timestamp",format="yyyy-MM-dd HH:mm:ss")
     private Date newsDate;
-    private String sourceCommentNum;
+
+    @JSONField(name="commentCount")
+    private Integer sourceCommentNum;
+
     private String topicWord;
 
     public int getId() {
@@ -69,11 +81,11 @@ public class NewsList {
         this.newsDate = newsDate;
     }
 
-    public String getSourceCommentNum() {
+    public Integer getSourceCommentNum() {
         return sourceCommentNum;
     }
 
-    public void setSourceCommentNum(String sourceCommentNum) {
+    public void setSourceCommentNum(Integer sourceCommentNum) {
         this.sourceCommentNum = sourceCommentNum;
     }
 

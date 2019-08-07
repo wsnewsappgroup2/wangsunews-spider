@@ -1,9 +1,13 @@
 package com.crow.controller;
 
+import com.crow.result.CommonResult;
 import com.crow.result.NewsDetailResult;
+import com.crow.result.NewsListResult;
 import com.crow.service.NewsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 /**
  * Created by 王衍庆
@@ -16,23 +20,23 @@ public class NewsController {
     @Autowired
     NewsService newsService;
 
-    /**新闻列表**/
-    @GetMapping(value = "/wsnews/news_recommend/{columnId}/{start}/{limit}")
-    public String getNews(
-            @RequestHeader(value="token") String token,
-            @PathVariable("columnId") String label,
-            @PathVariable("start") Integer start,
-            @PathVariable("limit") Integer limit){
-        // TODO: 查看权限校验的问题
-        return newsService.getNewsList(label,start,limit);
+    /**推荐新闻列表**/
+    @GetMapping(value = "/wsnews/news_recommend/{column}/{page}/{pagesize}")
+    public CommonResult<List<NewsListResult>> getRecommendedNewsList(
+            @RequestHeader(value = "Authorization",required = false) String token,
+            @PathVariable(value = "column",required = false) String column,
+            @PathVariable(value = "page",required = false) Integer page,
+            @PathVariable(value = "pagesize",required = false) Integer pageSize){
+        // TODO: 进阶：使用token获取openid进而查询相关的表进行推荐
+        return newsService.getNewsListByCloumn(column,page,pageSize);
     }
 
     /**新闻搜索**/
-    @GetMapping(value = "/wsnews/news_search/{keyword}/{start}/{limit}")
+    @GetMapping(value = "/wsnews/news_search/{keyword}/{page}/{pagesize}")
     public String searchNews(
             @PathVariable("keyword") String keyword,
-            @PathVariable("start") Integer start,
-            @PathVariable("limit") Integer limit){
+            @PathVariable("page") Integer start,
+            @PathVariable("pagesize") Integer limit){
         return newsService.searchNewsLikeTitle(keyword,start,limit);
     }
 

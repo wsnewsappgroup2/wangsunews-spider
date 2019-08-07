@@ -13,10 +13,28 @@ public class NewsDetailResult {
     private String source;
     private Date newsDate;
     private String mainImage;
-    private List<NewsContent> newsContents;
 
-    private String status;
-    private String code;
+    public class NewsContent{
+        String content;
+        String contentType;
+
+        public String getContent() {
+            return content;
+        }
+
+        public void setContent(String content) {
+            this.content = content;
+        }
+
+        public String getContentType() {
+            return contentType;
+        }
+
+        public void setContentType(String contentType) {
+            this.contentType = contentType;
+        }
+    }
+    private List<NewsContent> newsContents;
 
     public String getLabel() {
         return label;
@@ -72,21 +90,5 @@ public class NewsDetailResult {
 
     public void setNewsContents(List<NewsContent> newsContents) {
         this.newsContents = newsContents;
-    }
-
-    public String getStatus() {
-        return status;
-    }
-
-    public void setStatus(String status) {
-        this.status = status;
-    }
-
-    public String getCode() {
-        return code;
-    }
-
-    public void setCode(String code) {
-        this.code = code;
     }
 }

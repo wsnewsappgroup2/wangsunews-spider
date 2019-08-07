@@ -3,6 +3,7 @@ package com.crow.filter;
 import com.alibaba.fastjson.JSON;
 import com.crow.result.ResultInfo;
 import com.crow.utils.JwtUtil;
+import org.springframework.core.annotation.Order;
 import org.springframework.http.HttpStatus;
 
 import javax.servlet.*;
@@ -13,6 +14,10 @@ import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
 import java.io.UnsupportedEncodingException;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.Set;
 
 
 /**
@@ -22,11 +27,27 @@ import java.io.UnsupportedEncodingException;
  * @Date: Created in 9:38 2019/8/7
  * @Version: V1.0
  */
-@WebFilter()
+@WebFilter(urlPatterns = "/*")
+@Order(3)
 public class TokenFilter implements Filter {
+    private static final Set<String> ALLOWED_PATHS =
+            Collections.unmodifiableSet(
+                    new HashSet<>(
+                            Arrays.asList(
+                                    "/wsnews/login"
+                            )
+                    )
+            );
+
     @Override
     public void init(FilterConfig filterConfig) throws ServletException {
 
+    }
+
+    @Override
+    public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain) throws IOException, ServletException {
+        // doFilterByToken(servletRequest,servletResponse,filterChain);
+        filterChain.doFilter(servletRequest,servletResponse);
     }
 
     @Override
@@ -34,8 +55,8 @@ public class TokenFilter implements Filter {
 
     }
 
-    @Override
-    public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain) throws IOException, ServletException {
+    /**带验证token的过滤处理**/
+    private void doFilterByToken(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain)throws IOException, ServletException{
         HttpServletRequest request = (HttpServletRequest) servletRequest;
         HttpServletResponse response = (HttpServletResponse) servletResponse;
 
@@ -49,15 +70,16 @@ public class TokenFilter implements Filter {
         response.setCharacterEncoding("UTF-8");
         response.setContentType("application/json; charset=utf-8");
 
+
         ResultInfo resultInfo=new ResultInfo();
         String token = request.getHeader("Authorization");
         boolean isValidate=false;
-
+        String path = request.getRequestURI().substring(request.getContextPath().length()).replaceAll("[/]+$", "");
 
         String method=request.getMethod();
-        if(method.equals("OPTIONS")){
-            // 如果是预请求方法则直接放过
-            response.setStatus(HttpServletResponse.SC_OK);
+        if(method.equals("OPTIONS") || ALLOWED_PATHS.contains(path)){
+            // 预请求方法和允许的路径直接通过
+            // esponse.setStatus(HttpServletResponse.SC_OK);
             filterChain.doFilter(request,response);
         }else{
             if(token!=null && !token.isEmpty() && JwtUtil.verify(token)){
@@ -76,9 +98,7 @@ public class TokenFilter implements Filter {
         }
     }
 
-    /**
-     * 无需转发，直接返回Response信息
-     */
+    /**无需转发，直接返回Response信息**/
     private void response401(ServletRequest request, ServletResponse response, ResultInfo resultInfo) throws UnsupportedEncodingException,IOException {
         HttpServletResponse httpServletResponse = (HttpServletResponse) response;
         httpServletResponse.setStatus(HttpStatus.UNAUTHORIZED.value());
@@ -110,4 +130,5 @@ public class TokenFilter implements Filter {
             }
         }
     }
+
 }

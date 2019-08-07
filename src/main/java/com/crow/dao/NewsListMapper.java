@@ -18,10 +18,18 @@ public interface NewsListMapper {
     @Insert("insert into news_list (`label`,`source`,`main_image`,`title`,`create_date`,`source_comment_num`,`topic_word`) values(#{label},#{source},#{mainImage},#{title},#{createDate},#{newsDate}),#{sourceCommentNum}),#{topicWord})")
     void insertSinaEnt(NewsList newsList);
 
+    // 根据标签获取新闻主要信息列表
     @Select("SELECT * FROM news_list " +
             "WHERE label=#{label} " +
             "ORDER BY news_date DESC " +
             "LIMIT #{start},#{limit}")
+    @Results(id="newsListResultsMap",value={
+            @Result(property = "mainImage",column = "main_image"),
+            @Result(property = "createDate",column = "create_date"),
+            @Result(property = "newsDate",column = "news_date"),
+            @Result(property = "sourceCommentNum",column = "source_comment_num"),
+            @Result(property = "topicWord",column = "topic_word"),
+    })
     List<NewsList> selectNewsListByLabel(
             @Param("label") String label,
             @Param("start") Integer start,
@@ -30,7 +38,8 @@ public interface NewsListMapper {
     @Select("SELECT * FROM news_list " +
             "WHERE title LIKE %#{title}% " +
             "LIMIT #{start},#{limit}")
-    List<NewsList> selectNewsListLikeTitle(
+    @ResultMap("newsListResultsMap")
+    List<NewsList> selectNewsListWhereTitleOrContentLike(
             @Param("title") String title,
             @Param("start") Integer start,
             @Param("limit")Integer limit);
