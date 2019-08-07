@@ -3,7 +3,9 @@ package com.crow.dao;
 import com.crow.entity.ContentDetail;
 import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Mapper;
+import org.springframework.stereotype.Component;
 
+@Component
 @Mapper
 public interface ContentDetailMapper {
     @Insert("insert into content_detail (`news_id`,`content`,`content_type`,`index_id`) values(#{newsId},#{content},#{contentType},#{indexId})")
