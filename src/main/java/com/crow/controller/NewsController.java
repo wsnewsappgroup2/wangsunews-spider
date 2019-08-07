@@ -1,5 +1,6 @@
 package com.crow.controller;
 
+import com.crow.result.NewsDetailResult;
 import com.crow.service.NewsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -37,7 +38,7 @@ public class NewsController {
 
     /**单个新闻信息页**/
     @GetMapping(value = "/wsnews/new_info/{newsId}")
-    public String getSingleNew( @PathVariable String newsId){
+    public NewsDetailResult getSingleNew(@PathVariable String newsId){
         return newsService.getSingleNewById(newsId);
     }
 }

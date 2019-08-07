@@ -1,7 +1,7 @@
 package com.crow.dao;
 
 import com.crow.entity.NewsList;
-import com.crow.entity.NewsDetailCustom;
+import com.crow.entity.custom.NewsDetailCustom;
 import org.apache.ibatis.annotations.*;
 import org.springframework.stereotype.Component;
 
@@ -35,7 +35,7 @@ public interface NewsListMapper {
             @Param("start") Integer start,
             @Param("limit")Integer limit);
 
-    @Select("SELECT `label`,`title`,`news_id` AS newsId, `source`, `news_date` AS newsDate,`content`,`main_image` AS mainImage, `content_type` AS contentType, `index_id` AS indexId" +
+    @Select("SELECT `label`,`title`,`news_id` AS newsId, `source`, `news_date` AS newsDate,`content`,`main_image` AS mainImage, `content_type` AS contentType" +
             "FROM `content_detail` LEFT JOIN `news_list` ON `content_detail`.news_id=`news_list`.id " +
             "WHERE `news_id`=#{newsId} " +
             "ORDER BY `index_id` ASC")
