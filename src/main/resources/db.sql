@@ -7,6 +7,10 @@ CREATE TABLE `news_list` (
   `title` varchar(128) COLLATE utf8_unicode_ci NOT NULL,
   `create_date` datetime NOT NULL,
   `news_date` datetime NOT NULL,
+  `source_comment_num` int(11),
+  `topic_word` varchar(64),
+
+
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
