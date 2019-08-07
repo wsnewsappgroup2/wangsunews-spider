@@ -49,7 +49,8 @@ public class HupuSpiderPipeline implements Pipeline{
                     newsList.setCreateDate(DateUtil.now());
                     newsList.setNewsDate(post.getNewsDate());
                     newsList.setMainImage(post.getMainImage());
-                    newsListMapper.insert(newsList);
+                    newsList.setSourceCommentNum(((int)(1+Math.random()*(10-1+1))));
+                    newsListMapper.insertTest(newsList);
                     ContentDetail contentDetail = new ContentDetail();
                     contentDetail.setNewsId(newsList.getId());
                     contentDetail.setContent(post.getContent());

@@ -43,35 +43,35 @@ public class StartSpiderController {
         HttpClientDownloader httpClientDownloader = new HttpClientDownloader();
         //设置动态转发代理，使用定制的ProxyProvider
         httpClientDownloader.setProxyProvider(CrowProxyProvider.from(new Proxy("forward.xdaili.cn", 80)));
-//        Spider hupuSpider ;
-//        hupuSpider = Spider.create(new HupuNBAPageProcessor());
-//                hupuSpider.addUrl("https://voice.hupu.com/nba/1");
-//                hupuSpider.addPipeline(hupuSpiderPipeline);
-//                hupuSpider.thread(1);
-//                hupuSpider.start();
-//                try {
-//                    Thread.sleep(10000);
-//                }catch (Exception e){
-//                    System.out.println(e.getMessage());
-//                }
-//                logger.error("hupuSpider stop！");
-//                hupuSpider.stop();
-        Spider sinaEntSpider;
-        sinaEntSpider = Spider.create(new SinaSpiderProcessor());
-//        sinaEntSpider.addUrl("http://ent.sina.com.cn/weibo/");
-        sinaEntSpider.addUrl("https://ent.sina.com.cn/s/m/2019-08-06/doc-ihytcitm7234678.shtml");
-        sinaEntSpider.addPipeline(hupuSpiderPipeline);
-        sinaEntSpider.setDownloader(new SeleniumDownloader("C:\\Program Files (x86)\\Google\\Chrome\\Application\\chromedriver.exe"));
-        sinaEntSpider.thread(1);
-        sinaEntSpider.start();
-        try {
-            Thread.sleep(10000);
-        }catch (Exception e){
-            System.out.println(e.getMessage());
-        }
-        logger.error("SinaEnt Spider stop！");
-        sinaEntSpider.stop();
-
+        Spider hupuSpider ;
+        hupuSpider = Spider.create(new HupuNBAPageProcessor());
+                hupuSpider.addUrl("https://voice.hupu.com/nba/1");
+                hupuSpider.addPipeline(hupuSpiderPipeline);
+                hupuSpider.thread(1);
+                hupuSpider.start();
+                try {
+                    Thread.sleep(100000);
+                }catch (Exception e){
+                    System.out.println(e.getMessage());
+                }
+                logger.error("hupuSpider stop！");
+                hupuSpider.stop();
+//        Spider sinaEntSpider;
+//        sinaEntSpider = Spider.create(new SinaSpiderProcessor());
+////        sinaEntSpider.addUrl("http://ent.sina.com.cn/weibo/");
+//        sinaEntSpider.addUrl("https://ent.sina.com.cn/s/m/2019-08-06/doc-ihytcitm7234678.shtml");
+//        sinaEntSpider.addPipeline(hupuSpiderPipeline);
+//        sinaEntSpider.setDownloader(new SeleniumDownloader("C:\\Program Files (x86)\\Google\\Chrome\\Application\\chromedriver.exe"));
+//        sinaEntSpider.thread(1);
+//        sinaEntSpider.start();
+//        try {
+//            Thread.sleep(10000);
+//        }catch (Exception e){
+//            System.out.println(e.getMessage());
+//        }
+//        logger.error("SinaEnt Spider stop！");
+//        sinaEntSpider.stop();
+//
         return "爬虫开启";
     }
 
