@@ -1,35 +1,16 @@
-package com.crow.entity;
+package com.crow.entity.custom;
 
-/**
- * 用于显示单个新闻页面的相关信息
- * **/
+import java.util.Date;
+
 public class NewsDetailCustom {
     private String label;
     private String title;
     private String newsId;
     private String source;
-    private String newsDate;
+    private Date newsDate;
     private String content;
     private String mainImage;
-
     private String contentType;
-    private String indexId;
-
-    public String getContentType() {
-        return contentType;
-    }
-
-    public void setContentType(String contentType) {
-        this.contentType = contentType;
-    }
-
-    public String getIndexId() {
-        return indexId;
-    }
-
-    public void setIndexId(String indexId) {
-        this.indexId = indexId;
-    }
 
     public String getLabel() {
         return label;
@@ -63,11 +44,11 @@ public class NewsDetailCustom {
         this.source = source;
     }
 
-    public String getNewsDate() {
+    public Date getNewsDate() {
         return newsDate;
     }
 
-    public void setNewsDate(String newsDate) {
+    public void setNewsDate(Date newsDate) {
         this.newsDate = newsDate;
     }
 
@@ -85,5 +66,13 @@ public class NewsDetailCustom {
 
     public void setMainImage(String mainImage) {
         this.mainImage = mainImage;
+    }
+
+    public String getContentType() {
+        return contentType;
+    }
+
+    public void setContentType(String contentType) {
+        this.contentType = contentType;
     }
 }

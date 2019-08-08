@@ -10,6 +10,9 @@ import org.springframework.test.context.junit4.SpringRunner;
 
 import java.lang.reflect.Method;
 
+/**
+ * Created by wangyq1
+ */
 @RunWith(SpringRunner.class)
 @SpringBootTest
 public class LoginServiceTest {

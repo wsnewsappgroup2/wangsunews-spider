@@ -1,9 +1,6 @@
 package com.crow;
 
 import com.crow.controller.StartSpiderController;
-import com.crow.dao.NewsListMapper;
-import com.crow.entity.CommentDetail;
-import com.crow.entity.NewsList;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -22,5 +19,4 @@ public class HupuspiderApplicationTests {
 		String result = startSpiderController.index();
 		Assert.assertSame("爬虫开启", result);
 	}
-
 }

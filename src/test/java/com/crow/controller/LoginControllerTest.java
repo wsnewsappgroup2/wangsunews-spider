@@ -10,6 +10,9 @@ import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
+/**
+ * Created by wangyq1
+ */
 @RunWith(SpringRunner.class)
 @SpringBootTest
 public class LoginControllerTest {
@@ -22,7 +25,7 @@ public class LoginControllerTest {
 
     @Test
     public void testLogin() throws Exception {
-        ResultActions response=mockMvc.perform(MockMvcRequestBuilders.post("/wsnews/login")
+        ResultActions response=mockMvc.perform(MockMvcRequestBuilders.post("/wsnews/silentLogin")
                 .param("code","XXX","男"));
         System.out.println("xx");
     }
