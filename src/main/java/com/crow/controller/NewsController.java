@@ -27,8 +27,7 @@ public class NewsController {
     public ColumnsInfoResult getPersonalColumn(
             @RequestHeader(value = "Authorization",required = false) String token){
         String openid= JwtUtil.getOpenid(token);
-        return null;
-        //return newsService.getPersonalColums(openid);
+        return newsService.getPersonalColums(openid);
     }
 
     /**获取所有的栏目列表**/
