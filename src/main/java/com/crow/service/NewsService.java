@@ -8,7 +8,6 @@ import com.crow.entity.NewsList;
 import com.crow.entity.custom.NewsDetailCustom;
 import com.crow.result.CommonResult;
 import com.crow.result.NewsDetailResult;
-import com.crow.result.NewsDetailResult.NewsContent;
 import com.crow.result.NewsListResult;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -26,9 +25,19 @@ public class NewsService {
     @Autowired
     NewsListMapper newsListMapper;
 
-    /**根据 栏目 获取推荐新闻列表**/
-    public CommonResult<List<NewsListResult>> getNewsListByCloumn(String column, Integer start, Integer limit){
-        List<NewsList> newsList=newsListMapper.selectNewsListByLabel(column,start,limit);
+    /**获取特定栏目的新闻列表**/
+    public CommonResult<List<NewsListResult>> getNewsListByCloumn(Integer columnId, Integer page, Integer pageSize){
+        List<NewsList> newsList=null;
+
+        int start=page*pageSize;
+
+        if(columnId!=-1){
+            // 具体栏目列表
+            newsList=newsListMapper.selectPagedNewsListByLabelId(columnId,start,pageSize);
+        }else{
+            // 默认推荐列表
+            newsList=newsListMapper.selectDefaultPagedNewsList(start,pageSize);
+        }
 
         CommonResult<List<NewsListResult>> commonResult=new CommonResult<List<NewsListResult>>();
         if(newsList==null || newsList.size()<=0){

@@ -22,11 +22,11 @@ public interface NewsListMapper {
     void insertTest(NewsList newsList);
 
 
-    // 根据标签获取新闻主要信息列表
+    // 根据栏目id获取新闻主要信息列表
     @Select("SELECT * FROM news_list " +
-            "WHERE label=#{label} " +
-            "ORDER BY news_date DESC " +
-            "LIMIT #{start},#{limit}")
+            "WHERE `label`=(SELECT map.`label` FROM `label_column_mapping` map WHERE map.label_id=#{labelId})" +
+            "ORDER BY news_date DESC" +
+            "LIMIT #{start},#{pageSize}")
     @Results(id="newsListResultsMap",value={
             @Result(property = "mainImage",column = "main_image"),
             @Result(property = "createDate",column = "create_date"),
@@ -34,10 +34,19 @@ public interface NewsListMapper {
             @Result(property = "sourceCommentNum",column = "source_comment_num"),
             @Result(property = "topicWord",column = "topic_word"),
     })
-    List<NewsList> selectNewsListByLabel(
-            @Param("label") String label,
+    List<NewsList> selectPagedNewsListByLabelId(
+            @Param("labelId") Integer labelId,
             @Param("start") Integer start,
-            @Param("limit")Integer limit);
+            @Param("pageSize")Integer pageSize);
+
+
+    // 获取默认的新闻列表结果
+    @Select("SELECT * FROM news_list " +
+            "ORDER BY news_date DESC " +
+            "LIMIT #{start},#{pageSize}")
+    List<NewsList> selectDefaultPagedNewsList(
+            @Param("start") Integer start,
+            @Param("pageSize") Integer pageSize);
 
     @Select("SELECT * FROM news_list " +
             "WHERE title LIKE %#{title}% " +

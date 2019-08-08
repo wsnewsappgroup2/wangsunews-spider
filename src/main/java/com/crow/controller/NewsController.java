@@ -21,14 +21,14 @@ public class NewsController {
     private NewsService newsService;
 
     /**推荐新闻列表**/
-    @GetMapping(value = "/wsnews/news_recommend/{column}/{page}/{pagesize}")
+    @GetMapping(value = "/wsnews/news_recommend/{columnId}/{page}/{pagesize}")
     public CommonResult<List<NewsListResult>> getRecommendedNewsList(
             @RequestHeader(value = "Authorization",required = false) String token,
-            @PathVariable(value = "column",required = false) String column,
+            @PathVariable(value = "columnId",required = false) Integer columnId,
             @PathVariable(value = "page",required = false) Integer page,
             @PathVariable(value = "pagesize",required = false) Integer pageSize){
         // TODO: 进阶：使用token获取openid进而查询相关的表进行推荐
-        return newsService.getNewsListByCloumn(column,page,pageSize);
+        return newsService.getNewsListByCloumn(columnId,page,pageSize);
     }
 
     /**新闻搜索**/
