@@ -1,5 +1,8 @@
 package com.crow.service;
 
+import com.alibaba.fastjson.JSONObject;
+import com.crow.entity.custom.PersonalColumnInfoCustom;
+import com.crow.result.ColumnsInfoResult;
 import com.crow.result.CommonResult;
 import com.crow.result.NewsDetailResult;
 import com.crow.result.NewsListResult;
@@ -24,11 +27,10 @@ public class NewsServiceTest {
     /**获取用户列表单元测试**/
     @Test
     public void testGetNewsListByCloumn(){
-        String label="sport";
         int start=2;
         int limit=5;
         String token="public-1232213123";
-        CommonResult<List<NewsListResult>> commonResults=newsService.getNewsListByCloumn(label,start,limit);
+        CommonResult<List<NewsListResult>> commonResults=newsService.getNewsListByCloumn(1,start,limit);
         System.out.println("OK");
     }
 
@@ -45,5 +47,17 @@ public class NewsServiceTest {
         System.out.println("OK");
     }
 
+    /**测试获取现有的所有栏目的列表**/
+    @Test
+    public void testGetALLColums(){
+        ColumnsInfoResult result= newsService.getAllColumns();
+        System.out.println(JSONObject.toJSONString(result));
+    }
 
+    /**测试获取用户个人收藏的栏目**/
+    @Test
+    public void testGetPersonalColumns(){
+        ColumnsInfoResult<PersonalColumnInfoCustom> result=newsService.getPersonalColums("3XSZ");
+        System.out.println(JSONObject.toJSONString(result));
+    }
 }

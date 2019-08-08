@@ -25,7 +25,7 @@ public class LoginControllerTest {
 
     @Test
     public void testLogin() throws Exception {
-        ResultActions response=mockMvc.perform(MockMvcRequestBuilders.post("/wsnews/login")
+        ResultActions response=mockMvc.perform(MockMvcRequestBuilders.post("/wsnews/silentLogin")
                 .param("code","XXX","男"));
         System.out.println("xx");
     }

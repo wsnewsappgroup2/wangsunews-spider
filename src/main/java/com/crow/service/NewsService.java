@@ -5,10 +5,13 @@ import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.crow.dao.NewsListMapper;
 import com.crow.entity.NewsList;
+import com.crow.entity.custom.ColumnInfoCustom;
 import com.crow.entity.custom.NewsDetailCustom;
+import com.crow.entity.custom.PersonalColumnInfoCustom;
 import com.crow.result.CommonResult;
 import com.crow.result.NewsDetailResult;
 import com.crow.result.NewsListResult;
+import com.crow.result.ColumnsInfoResult;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -17,13 +20,56 @@ import java.util.Date;
 import java.util.List;
 
 /**
- * Created by 王衍庆
+ * Created by wangyq1
  */
 @Service
 public class NewsService {
 
     @Autowired
     NewsListMapper newsListMapper;
+
+    /**获取用户个人收藏的栏目列表**/
+    public ColumnsInfoResult getPersonalColums(String openid){
+        ColumnsInfoResult<List<PersonalColumnInfoCustom>> columnsInfoResult =new ColumnsInfoResult<List<PersonalColumnInfoCustom>>();
+        if(openid==null){
+            columnsInfoResult.setMsg("获取用户收藏的栏目失败");
+            columnsInfoResult.setSuccess(false);
+            columnsInfoResult.setColumns(new ArrayList<>());
+            return columnsInfoResult;
+        }
+
+        List<PersonalColumnInfoCustom> personalColumnInfoCustoms = newsListMapper.selectPersonalColumnsByOpenId(openid);
+        if(personalColumnInfoCustoms ==null || personalColumnInfoCustoms.isEmpty()){
+            // 用户没有收藏的栏目
+            columnsInfoResult.setMsg("获取用户收藏的栏目失败");
+            columnsInfoResult.setSuccess(false);
+            columnsInfoResult.setColumns(new ArrayList<>());
+        }else{
+            // TODO: 在mapper进行关联查询或在这里重新查询获取使用算法的数量
+            columnsInfoResult.setMsg("获取成功");
+            columnsInfoResult.setSuccess(true);
+            columnsInfoResult.setColumns(personalColumnInfoCustoms);
+        }
+        return columnsInfoResult;
+    }
+
+    /**获取所有的栏目列表**/
+    public ColumnsInfoResult getAllColumns(){
+        List<ColumnInfoCustom> columnInfoCustoms =newsListMapper.selectAllColumns();
+        ColumnsInfoResult<List<ColumnInfoCustom>> columnsInfoResult =new ColumnsInfoResult<List<ColumnInfoCustom>>();
+
+        if(columnInfoCustoms !=null && !columnInfoCustoms.isEmpty()){
+            columnsInfoResult.setMsg("获取成功");
+            columnsInfoResult.setSuccess(true);
+            columnsInfoResult.setColumns(columnInfoCustoms);
+        }else{
+            // 获取失败时返回的是内容为空的列表
+            columnsInfoResult.setMsg("获取现有所有栏目失败");
+            columnsInfoResult.setSuccess(false);
+            columnsInfoResult.setColumns(new ArrayList<>());
+        }
+        return columnsInfoResult;
+    }
 
     /**获取特定栏目的新闻列表**/
     public CommonResult<List<NewsListResult>> getNewsListByCloumn(Integer columnId, Integer page, Integer pageSize){
@@ -68,7 +114,7 @@ public class NewsService {
 
     /**根据newsId获取**/
     public NewsDetailResult getSingleNewById(String newsId){
-        List<NewsDetailCustom> newsDetailCustoms=newsListMapper.selectNewsDetailById(newsId);
+        List<NewsDetailCustom> newsDetailCustoms=newsListMapper.selectNewsDetailByNewsId(newsId);
         // TODO: 转换成DetailResult
 
         String label=newsDetailCustoms.get(0).getLabel();

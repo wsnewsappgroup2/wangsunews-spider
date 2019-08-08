@@ -3,7 +3,9 @@ package com.crow.controller;
 import com.crow.result.CommonResult;
 import com.crow.result.NewsDetailResult;
 import com.crow.result.NewsListResult;
+import com.crow.result.ColumnsInfoResult;
 import com.crow.service.NewsService;
+import com.crow.utils.JwtUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -19,6 +21,22 @@ public class NewsController {
 
     @Autowired
     private NewsService newsService;
+
+    /**查询用户个人栏目列表**/
+    @GetMapping(value = "/wsnews/query_private_column")
+    public ColumnsInfoResult getPersonalColumn(
+            @RequestHeader(value = "Authorization",required = false) String token){
+        String openid= JwtUtil.getOpenid(token);
+        return null;
+        //return newsService.getPersonalColums(openid);
+    }
+
+    /**获取所有的栏目列表**/
+    @GetMapping(value = "/wsnews/query_column")
+    public ColumnsInfoResult getAllColumns(
+            @RequestHeader(value = "Authorization",required = false) String token){
+        return newsService.getAllColumns();
+    }
 
     /**推荐新闻列表**/
     @GetMapping(value = "/wsnews/news_recommend/{columnId}/{page}/{pagesize}")
