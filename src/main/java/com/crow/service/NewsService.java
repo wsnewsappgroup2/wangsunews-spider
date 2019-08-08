@@ -107,7 +107,7 @@ public class NewsService {
     }
 
     /**根据标题进行模糊查询**/
-    public String searchNewsLikeTitle(String title, Integer start, Integer limit) {
+    public String vagueSearch(String title, Integer start, Integer limit) {
         List<NewsList> list=newsListMapper.selectNewsListWhereTitleOrContentLike(title,start,limit);
         return genResponse(list);
     }

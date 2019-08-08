@@ -50,11 +50,11 @@ public class NewsController {
 
     /**新闻搜索**/
     @GetMapping(value = "/wsnews/news_search/{keyword}/{page}/{pagesize}")
-    public String searchNews(
+    public CommonResult<List<NewsListResult>> searchNews(
             @PathVariable("keyword") String keyword,
             @PathVariable("page") Integer start,
             @PathVariable("pagesize") Integer limit){
-        return newsService.searchNewsLikeTitle(keyword,start,limit);
+        return null;
     }
 
     /**单个新闻信息页**/
