@@ -10,8 +10,9 @@ import java.util.List;
 @Mapper
 public interface UserMapper {
 
-    @Insert("insert into user (`openid`,`session_key`,`unionid`,`username`,`sex`) " +
-            "values(#{openid},#{session_key},#{unionid},#{username},#{sex})")
+    @Options(useGeneratedKeys = true, keyProperty = "id")
+    @Insert("insert into user (`openid`,`session_key`,`unionid`) " +
+            "values(#{openid},#{session_key},#{unionid})")
     void insert(User user);
 
     @Select("SELECT * FROM `user` " +

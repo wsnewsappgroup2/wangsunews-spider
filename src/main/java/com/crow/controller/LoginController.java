@@ -1,14 +1,12 @@
 package com.crow.controller;
 
+import com.alibaba.fastjson.JSONObject;
 import com.crow.service.LoginService;
 import com.crow.utils.JwtUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.Map;
 
@@ -24,20 +22,22 @@ public class LoginController {
     private LoginService loginService;
 
     @PostMapping(value = "/wsnews/login",consumes = "application/json",produces = "application/json;charset=UTF-8")
-    public String loginByWechatAccount(@RequestBody Map<String, String> map){
-        // 用户登录
-        //request获取openid
-        String openid = null;
+    public String loginByWechatAccount(
+            @RequestBody Map<String, String> map){
+        // 静默登录
+        JSONObject validateResponse= loginService.silentLogin(map.get("code"));
+        String openid=validateResponse.getString("open_id");
+
         String token = null;
         try {
             token = JwtUtil.sign(openid);
         }catch (Exception e){
             logger.error(e.getMessage());
-
-
         }
 
-        return loginService.login(map.get("code"),map.get("username"),map.get("sex"));
+        validateResponse.remove("open_id");
+        validateResponse.put("token",token);
+        return validateResponse.toJSONString();
     }
 
 }

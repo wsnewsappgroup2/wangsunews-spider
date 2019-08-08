@@ -22,7 +22,8 @@ public class LoginService {
     @Autowired
     UserMapper userMapper;
 
-    public String login(String code,String username,String sex){
+    /**静默登录授权获取返回包括openid**/
+    public JSONObject silentLogin(String code){
         // 向微信请求授权登录
         JSONObject validateResult= validateByWechat(code);
         int errorCode=validateResult.getIntValue("errcode");
@@ -30,15 +31,13 @@ public class LoginService {
 
         if(errorCode==0){
             // 授权请求成功
-            validateResult.put("username",username);
-            validateResult.put("sex",sex);
             user= getUserByValidateResult(validateResult);
         }
 
         JSONObject validateResponse=new JSONObject();
         if(user!=null){
             // 登录授权成功响应
-            validateResponse.put("msg","Login Successfully --- Wechat User: "+username);
+            validateResponse.put("msg","Login Successfully");
             validateResponse.put("open_id",user.getOpenid());
             validateResponse.put("success",true);
         }else{
@@ -54,11 +53,11 @@ public class LoginService {
                     break;
             }
             // 登录授权失败响应
-            validateResponse.put("msg","Login Failed --- Wechat User: "+username+"Error Code: "+errorCode);
+            validateResponse.put("msg","Login Failed Error Code: "+errorCode);
             validateResponse.put("open_id",null);
             validateResponse.put("success",false);
         }
-        return validateResponse.toJSONString();
+        return validateResponse;
     }
 
 

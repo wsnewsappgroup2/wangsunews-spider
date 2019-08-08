@@ -1,6 +1,7 @@
 package com.crow.entity;
 
 public class User {
+    private Integer id;
     // 用户在应用内的唯一标识
     private String openid;
     // 用户的会话密钥
@@ -11,6 +12,15 @@ public class User {
     private String username;
     // 用户性别
     private String sex;
+
+
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
+    }
 
     public String getSex() {
         return sex;

@@ -34,7 +34,7 @@ public class TokenFilter implements Filter {
             Collections.unmodifiableSet(
                     new HashSet<>(
                             Arrays.asList(
-                                    "/wsnews/login"
+                                    "/wsnews/silentLogin"
                             )
                     )
             );
