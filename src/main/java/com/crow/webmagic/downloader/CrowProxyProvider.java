@@ -12,9 +12,12 @@ import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 
 /**
- * Created by CrowHawk on 17/10/16.
+ * @ClassName:CrowProxyProvider
+ * @Author: wuy2
+ * @Description: DONE
+ * @Date: Created in 19:40 2019/8/8
+ * @Version: V1.0
  */
-
 /**
  * 自定义的ProxyProvider
  * 添加了代理有效性校验
