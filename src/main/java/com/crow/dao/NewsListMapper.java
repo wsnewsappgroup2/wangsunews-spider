@@ -46,8 +46,8 @@ public interface NewsListMapper {
 
     // 根据栏目id获取新闻主要信息列表
     @Select("SELECT * FROM news_list " +
-            "WHERE `label`=(SELECT map.`label` FROM `label_column_mapping` map WHERE map.label_id=#{labelId})" +
-            "ORDER BY news_date DESC" +
+            "WHERE `label`=(SELECT map.`label` FROM `label_column_mapping` map WHERE map.label_id=#{labelId}) " +
+            "ORDER BY news_date DESC " +
             "LIMIT #{start},#{pageSize}")
     @Results(id="newsListResultsMap",value={
             @Result(property = "mainImage",column = "main_image"),
@@ -87,7 +87,7 @@ public interface NewsListMapper {
             @Param("limit")Integer limit);
 
     // 通过新闻ID 获取新闻的详细信息
-    @Select("SELECT `label`,`title`,`news_id` AS newsId, `source`, `news_date` AS newsDate,`content`,`main_image` AS mainImage, `content_type` AS contentType" +
+    @Select("SELECT `label`,`title`,`news_id` AS newsId, `source`, `news_date` AS newsDate,`content`,`main_image` AS mainImage, `content_type` AS contentType " +
             "FROM `content_detail` LEFT JOIN `news_list` ON `content_detail`.news_id=`news_list`.id " +
             "WHERE `news_id`=#{newsId} " +
             "ORDER BY `index_id` ASC")
