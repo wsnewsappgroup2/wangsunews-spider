@@ -62,8 +62,6 @@ public class LoginServiceTest {
         user.setUsername("test_username");
         user.setSession_key("eeeee");
         user.setUnionid("xxxx");
-
-        method.invoke(loginService,user);
         System.out.println("save user successfully");
     }
 }
