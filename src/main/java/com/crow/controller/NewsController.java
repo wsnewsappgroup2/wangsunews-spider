@@ -30,7 +30,7 @@ public class NewsController {
     }
 
     /**获取所有的栏目列表**/
-    @GetMapping(value = "/wsnews/query_column")
+    @GetMapping(value = "/wsnews/query_common_column")
     public ColumnsInfoResult getAllColumns(
             @RequestHeader(value = "Authorization",required = false) String token){
         return newsService.getAllColumns();

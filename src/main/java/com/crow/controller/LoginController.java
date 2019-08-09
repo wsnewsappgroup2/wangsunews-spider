@@ -21,8 +21,8 @@ public class LoginController {
     private LoginService loginService;
 
     @PostMapping(value = "/wsnews/login",consumes = "application/json",produces = "application/json;charset=UTF-8")
-    public String loginByWechatAccount(
-            @RequestBody Map<String, String> map){
+    public String silentVarifyLogin(
+            @RequestBody(required = false) Map<String, String> map){
         // 静默登录
         JSONObject validateResponse= loginService.silentLogin(map.get("code"));
         String openid=validateResponse.getString("open_id");

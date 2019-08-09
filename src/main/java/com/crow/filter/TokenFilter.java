@@ -34,7 +34,10 @@ public class TokenFilter implements Filter {
             Collections.unmodifiableSet(
                     new HashSet<>(
                             Arrays.asList(
-                                    "/wsnews/silentLogin"
+                                    "/test",
+                                    "/wsnews/login",
+                                    "/spider",
+                                    "/wsnews/query_common_column"
                             )
                     )
             );
@@ -46,8 +49,8 @@ public class TokenFilter implements Filter {
 
     @Override
     public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain) throws IOException, ServletException {
-        // doFilterByToken(servletRequest,servletResponse,filterChain);
-        filterChain.doFilter(servletRequest,servletResponse);
+        doFilterByToken(servletRequest,servletResponse,filterChain);
+        // filterChain.doFilter(servletRequest,servletResponse);
     }
 
     @Override
@@ -60,17 +63,6 @@ public class TokenFilter implements Filter {
         HttpServletRequest request = (HttpServletRequest) servletRequest;
         HttpServletResponse response = (HttpServletResponse) servletResponse;
 
-        //设置允许跨域的配置
-        // 这里填写你允许进行跨域的主机ip（正式上线时可以动态配置具体允许的域名和IP）
-        response.setHeader("Access-Control-Allow-Origin", "*");
-        response.setHeader("Access-Control-Allow-Methods","POST, GET, PUT, OPTIONS, DELETE, PATCH");
-        // Access-Control-Max-Age 用于 CORS 相关配置的缓存
-        response.setHeader("Access-Control-Max-Age", "3600");
-        response.setHeader("Access-Control-Allow-Headers","token,Origin, X-Requested-With, Content-Type, Accept");
-        response.setCharacterEncoding("UTF-8");
-        response.setContentType("application/json; charset=utf-8");
-
-
         ResultInfo resultInfo=new ResultInfo();
         String token = request.getHeader("Authorization");
         boolean isValidate=false;
@@ -79,7 +71,7 @@ public class TokenFilter implements Filter {
         String method=request.getMethod();
         if(method.equals("OPTIONS") || ALLOWED_PATHS.contains(path)){
             // 预请求方法和允许的路径直接通过
-            // esponse.setStatus(HttpServletResponse.SC_OK);
+            // response.setStatus(HttpServletResponse.SC_OK);
             filterChain.doFilter(request,response);
         }else{
             if(token!=null && !token.isEmpty() && JwtUtil.verify(token)){

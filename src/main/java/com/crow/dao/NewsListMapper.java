@@ -35,9 +35,8 @@ public interface NewsListMapper {
     List<PersonalColumnInfoCustom> selectPersonalColumnsByOpenId(@Param("openId") String openId);
 
     // 获取现有的所有栏目的信息
-    @Select("SELECT ucm.`label_id` AS `label_id`,`column_name` "+
-            "FROM `user_column_mapping` ucm LEFT JOIN `label_column_mapping` lcm "+
-            "ON ucm.label_id=lcm.label_id")
+    @Select("SELECT `label_id`,`column_name` " +
+            "FROM `label_column_mapping`")
     @Results(id = "labelColumnMappingResultsMap2", value = {
             @Result(property = "columnId",column = "label_id"),
             @Result(property = "columnName",column = "column_name")})
