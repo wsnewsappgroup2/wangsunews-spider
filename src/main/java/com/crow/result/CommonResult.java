@@ -5,16 +5,16 @@ package com.crow.result;
  * 通用的响应Result类
  */
 public class CommonResult<T> {
-    private String success;
+    private boolean success;
     private String code;
     private String msg;
     private T data;
 
-    public String getSuccess() {
+    public boolean isSuccess() {
         return success;
     }
 
-    public void setSuccess(String success) {
+    public void setSuccess(boolean success) {
         this.success = success;
     }
 

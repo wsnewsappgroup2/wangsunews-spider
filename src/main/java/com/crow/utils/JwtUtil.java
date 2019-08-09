@@ -12,6 +12,7 @@ import org.springframework.stereotype.Component;
 
 import javax.servlet.http.HttpServletRequest;
 import java.io.UnsupportedEncodingException;
+import java.util.Base64;
 import java.util.Date;
 
 
@@ -81,16 +82,15 @@ public class JwtUtil {
      * 生成签名,**过期
      *
      * @param openid 用户名
-     * @param telNo  电话
      * @return 加密的token
      */
     public static String sign(String openid) throws Exception {
         try {
 
-            String encryptJWTKey = "encryptJWTKey";
+            String encryptJWTKey = "why_key_Hello_scp_049";
             // 帐号加JWT私钥加密
-            String secret = openid + Base64ConvertUtil.decode(encryptJWTKey);
-            String accessTokenExpireTime = "36000";//毫秒
+            String secret = openid + Base64.getEncoder().encodeToString(encryptJWTKey.getBytes());
+            String accessTokenExpireTime = "36000000000000000";//毫秒
             Date date = new Date(System.currentTimeMillis() + Long.parseLong(accessTokenExpireTime) * 1000);
             Algorithm algorithm = Algorithm.HMAC256(secret);
             // 附带username,hotel信息
@@ -98,7 +98,7 @@ public class JwtUtil {
                     .withClaim("openid", openid)
                     .withExpiresAt(date)
                     .sign(algorithm);
-        }catch (UnsupportedEncodingException e) {
+        }catch (Exception e) {
             logger.error("JWTToken加密出现UnsupportedEncodingException异常:" + e.getMessage());
             throw new Exception("JWTToken加密出现UnsupportedEncodingException异常:" + e.getMessage());
         }

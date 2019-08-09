@@ -14,7 +14,6 @@ import java.util.Map;
  * Created by wangyq1
  * Last Modified By wangyq1 2019.8.8
  */
-@CrossOrigin
 @RestController
 public class LoginController {
     private static Logger logger = LoggerFactory.getLogger(LoginController.class);
@@ -22,8 +21,8 @@ public class LoginController {
     private LoginService loginService;
 
     @PostMapping(value = "/wsnews/login",consumes = "application/json",produces = "application/json;charset=UTF-8")
-    public String loginByWechatAccount(
-            @RequestBody Map<String, String> map){
+    public String silentVerifyLogin(
+            @RequestBody(required = false) Map<String, String> map){
         // 静默登录
         JSONObject validateResponse= loginService.silentLogin(map.get("code"));
         String openid=validateResponse.getString("open_id");
@@ -32,7 +31,7 @@ public class LoginController {
         try {
             token = JwtUtil.sign(openid);
         }catch (Exception e){
-            logger.error(e.getMessage());
+            logger.error("[Error When Verifying Token]:\n",e);
         }
 
         validateResponse.remove("open_id");

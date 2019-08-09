@@ -15,7 +15,6 @@ import java.util.List;
  * Created by wangyq1
  * Last Modified By wangyq1 2019.8.8
  */
-@CrossOrigin
 @RestController
 public class NewsController {
 
@@ -27,35 +26,43 @@ public class NewsController {
     public ColumnsInfoResult getPersonalColumn(
             @RequestHeader(value = "Authorization",required = false) String token){
         String openid= JwtUtil.getOpenid(token);
-        return null;
-        //return newsService.getPersonalColums(openid);
+        return newsService.getPersonalColums(openid);
     }
 
     /**获取所有的栏目列表**/
-    @GetMapping(value = "/wsnews/query_column")
+    @GetMapping(value = "/wsnews/query_common_column")
     public ColumnsInfoResult getAllColumns(
             @RequestHeader(value = "Authorization",required = false) String token){
         return newsService.getAllColumns();
     }
 
-    /**推荐新闻列表**/
-    @GetMapping(value = "/wsnews/news_recommend/{columnId}/{page}/{pagesize}")
-    public CommonResult<List<NewsListResult>> getRecommendedNewsList(
+    /**获取目标栏目下的（含推荐栏目）的新闻列表**/
+    @GetMapping(value = "/wsnews/query_news/{columnId}/{page}/{pagesize}")
+    public CommonResult<List<NewsListResult>> getNewsListInColumn(
             @RequestHeader(value = "Authorization",required = false) String token,
             @PathVariable(value = "columnId",required = false) Integer columnId,
             @PathVariable(value = "page",required = false) Integer page,
             @PathVariable(value = "pagesize",required = false) Integer pageSize){
         // TODO: 进阶：使用token获取openid进而查询相关的表进行推荐
-        return newsService.getNewsListByCloumn(columnId,page,pageSize);
+        return newsService.getNewsListByColumn(columnId,page,pageSize);
+    }
+
+    /**下拉获取推荐新闻**/
+    @GetMapping(value = "/wsnews/query_news/{columnId}")
+    public CommonResult<List<NewsListResult>> getRecommendedNewsList(
+            @RequestHeader(value = "Authorization",required = false) String token,
+            @PathVariable(value = "columnId",required = false) Integer columnId){
+        return newsService.getRecommendedNewsListByColumnId(columnId);
     }
 
     /**新闻搜索**/
     @GetMapping(value = "/wsnews/news_search/{keyword}/{page}/{pagesize}")
-    public String searchNews(
+    public CommonResult<List<NewsListResult>> searchNews(
+            @RequestHeader(value = "Authorization",required = false) String token,
             @PathVariable("keyword") String keyword,
-            @PathVariable("page") Integer start,
-            @PathVariable("pagesize") Integer limit){
-        return newsService.searchNewsLikeTitle(keyword,start,limit);
+            @PathVariable("page") Integer page,
+            @PathVariable("pagesize") Integer pageSize){
+        return newsService.vagueSearch(keyword,page,pageSize);
     }
 
     /**单个新闻信息页**/
