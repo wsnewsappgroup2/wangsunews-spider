@@ -8,7 +8,6 @@ import java.util.Map;
  * Created By wangyq1
  * 用于用户个人相关的响应控制
  * */
-@CrossOrigin
 @RestController
 public class UserController {
     // 新增个人栏目

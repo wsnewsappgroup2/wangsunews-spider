@@ -14,7 +14,6 @@ import java.util.Map;
  * Created by wangyq1
  * Last Modified By wangyq1 2019.8.8
  */
-@CrossOrigin
 @RestController
 public class LoginController {
     private static Logger logger = LoggerFactory.getLogger(LoginController.class);
