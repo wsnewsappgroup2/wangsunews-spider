@@ -62,17 +62,16 @@ public class TokenFilter implements Filter {
     private void doFilterByToken(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain)throws IOException, ServletException{
         HttpServletRequest request = (HttpServletRequest) servletRequest;
         HttpServletResponse response = (HttpServletResponse) servletResponse;
-
         ResultInfo resultInfo=new ResultInfo();
         String token = request.getHeader("Authorization");
         boolean isValidate=false;
         String path = request.getRequestURI().substring(request.getContextPath().length()).replaceAll("[/]+$", "");
-
         String method=request.getMethod();
+
         if(method.equals("OPTIONS") || ALLOWED_PATHS.contains(path)){
             // 预请求方法和允许的路径直接通过
-            response.setStatus(HttpServletResponse.SC_OK);
-            filterChain.doFilter(request,response);
+            isValidate=true;
+            filterChain.doFilter(servletRequest,servletResponse);
         }else{
             response.setCharacterEncoding("UTF-8");
             response.setContentType("application/json;charset=utf-8");
