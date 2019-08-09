@@ -101,7 +101,7 @@ public class ChinaPeapleProcessor extends BaseProcessor {
 
 
         setPost(title, content, comFrom, mainImage,newsDate,sourceCommentNum,
-                topicWord,page,"yyyy-MM-dd HH:mm:ss");
+                topicWord,page,"yyyy-MM-dd HH:mm:ss","politics");
 
     }
 

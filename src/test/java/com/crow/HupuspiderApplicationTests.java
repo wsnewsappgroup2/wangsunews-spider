@@ -16,7 +16,7 @@ public class HupuspiderApplicationTests {
 
 	@Test
 	public void testFunc(){
-		String result = startSpiderController.index();
+		String result = startSpiderController.test();
 		Assert.assertSame("爬虫开启", result);
 	}
 }

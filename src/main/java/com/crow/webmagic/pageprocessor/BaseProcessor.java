@@ -22,21 +22,21 @@ public class BaseProcessor extends AbstractProcessor {
     public void setPost(String title, String content,
                          String source, String mainImage,
                          String newsDate, String sourceCommentNum,
-                         String topicWord, Page page,String dateFormat) {
+                         String topicWord, Page page,String dateFormat,String label) {
         Post post = new Post();
-        simplePostWapper(title,content,source,mainImage,newsDate,dateFormat,post);
+        simplePostWapper(title,content,source,mainImage,newsDate,dateFormat,label,post);
         extendPostWrapper(sourceCommentNum,topicWord,post);
         page.putField("postInfo", post);
     }
     public void setPost(String title, String content,
                         String source, String mainImage,
-                        String newsDate, Page page,String dateFormat) {
+                        String newsDate, Page page,String dateFormat,String label) {
         Post post = new Post();
-        simplePostWapper(title,content,source,mainImage,newsDate,dateFormat,post);
+        simplePostWapper(title,content,source,mainImage,newsDate,dateFormat,label,post);
         page.putField("postInfo", post);
     }
     private void simplePostWapper(String title, String content, String source, String mainImage,
-                                  String newsDate,String dateFormat,Post post){
+                                  String newsDate,String dateFormat,String label,Post post){
 
         post.setTitle(title);
         post.setContent(content);
@@ -50,6 +50,7 @@ public class BaseProcessor extends AbstractProcessor {
             System.out.println(e.getMessage());
         }
         post.setNewsDate(newsdate);
+        post.setLabel(label);
 
     }
     private void extendPostWrapper(String sourceCommentNum, String topicWord,Post post){

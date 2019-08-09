@@ -92,7 +92,7 @@ public class HupuNBAPageProcessor extends BaseProcessor {//修改改类，定制
         //新闻时间
         String newsDate = page.getHtml().xpath("//*[@id=\"pubtime_baidu\"]/text()").toString();
 
-        setPost(title, content, comFrom, mainImage, newsDate, page, "yyyy-MM-dd HH:mm:ss");
+        setPost(title, content, comFrom, mainImage, newsDate, page, "yyyy-MM-dd HH:mm:ss","sport");
     }
 
 

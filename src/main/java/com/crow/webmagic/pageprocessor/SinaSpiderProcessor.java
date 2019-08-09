@@ -96,7 +96,7 @@ public class SinaSpiderProcessor extends BaseProcessor {
         //主题词
         String topicWord =  page.getHtml().xpath("/html/head/meta[@name=\"keywords\"]/@content").toString();
 
-        setPost(title, content, comFrom, mainImage,newsDate,sourceCommentNum,topicWord,page,"yyyy年MM月dd日 HH:mm:ss");
+        setPost(title, content, comFrom, mainImage,newsDate,sourceCommentNum,topicWord,page,"yyyy年MM月dd日 HH:mm:ss","ent");
 
     }
 

@@ -2,6 +2,7 @@ import pandas as pd
 import datetime
 import time
 import pymysql
+import sys
 class ContentBasedRecommender():
     #  初始化参数
     def __init__(self):
@@ -51,7 +52,6 @@ class ContentBasedRecommender():
 def most_recommend(u_id,title_type):
     engine = ContentBasedRecommender()
     rec = engine.recommend(u_id,title_type)
-    print rec
     return rec
 
 def update():
@@ -78,8 +78,9 @@ def getdata_mysql():
     news_merge = pd.merge(news_list, news_content, how='left', on='id')
     return news_merge
 
-prediction=most_recommend(sys.argv[1]，sys.argv[2])
-print (prediction)
+update()
+prediction=most_recommend(sys.argv[1],sys.argv[2])
+print(prediction)
 # u_id = 'use.csv'
 # update()
 # list1 = most_recommend(u_id,title_type=1)
