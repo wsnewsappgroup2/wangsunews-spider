@@ -34,18 +34,6 @@ public class NewsServiceTest {
         System.out.println("OK");
     }
 
-    /**获取单个用户登录详情页测试**/
-    @Test
-    public void testGetSingleNewById(){
-        NewsDetailResult results=newsService.getSingleNewById("2");
-        String label=results.getLabel();
-        String title=results.getTitle();
-        String newsId=results.getNewsId();
-        String source=results.getSource();
-        Date newsDate=results.getNewsDate();
-        String mainImage=results.getMainImage();
-        System.out.println("OK");
-    }
 
     /**测试获取现有的所有栏目的列表**/
     @Test
@@ -58,6 +46,14 @@ public class NewsServiceTest {
     @Test
     public void testGetPersonalColumns(){
         ColumnsInfoResult<PersonalColumnInfoCustom> result=newsService.getPersonalColums("3XSZ");
+        System.out.println(JSONObject.toJSONString(result));
+    }
+
+    /**测试新闻详情页**/
+    @Test
+    public void testGetSingleNewsContentById(){
+        // news_id 88 对应的内容id是86
+        CommonResult<NewsDetailResult> result= newsService.getSingleNewsContentById(88);
         System.out.println(JSONObject.toJSONString(result));
     }
 }

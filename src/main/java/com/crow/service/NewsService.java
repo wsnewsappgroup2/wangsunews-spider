@@ -1,10 +1,11 @@
 package com.crow.service;
 
 import com.alibaba.fastjson.JSONObject;
+import com.crow.dao.ContentDetailMapper;
 import com.crow.dao.NewsListMapper;
+import com.crow.entity.ContentDetail;
 import com.crow.entity.NewsList;
 import com.crow.entity.custom.ColumnInfoCustom;
-import com.crow.entity.custom.NewsDetailCustom;
 import com.crow.entity.custom.PersonalColumnInfoCustom;
 import com.crow.result.CommonResult;
 import com.crow.result.NewsDetailResult;
@@ -23,6 +24,9 @@ public class NewsService {
 
     @Autowired
     NewsListMapper newsListMapper;
+
+    @Autowired
+    ContentDetailMapper contentDetailMapper;
 
     /**获取用户个人收藏的栏目列表**/
     public ColumnsInfoResult getPersonalColums(String openid){
@@ -130,50 +134,62 @@ public class NewsService {
         return commonResult;
     }
 
-    //根据newsId获取
-    public NewsDetailResult getSingleNewById(String newsId){
-        List<NewsDetailCustom> newsDetailCustoms=newsListMapper.selectNewsDetailByNewsId(newsId);
-        // TODO: 转换成DetailResult
+    /**根据新闻ID获取新闻的具体内容**/
+    public CommonResult<NewsDetailResult> getSingleNewsContentById(Integer newsId){
+        CommonResult<NewsDetailResult> commonResult=new CommonResult<>();
+        NewsDetailResult newsDetailResult=new NewsDetailResult();
 
-        String label=newsDetailCustoms.get(0).getLabel();
-        String title=newsDetailCustoms.get(0).getTitle();
-        String source=newsDetailCustoms.get(0).getSource();
-        Date newsDate=newsDetailCustoms.get(0).getNewsDate();
-        String mainImage=newsDetailCustoms.get(0).getMainImage();
-
-        NewsDetailResult result=new NewsDetailResult();
-        result.setLabel(label);
-        result.setTitle(title);
-        result.setSource(source);
-        result.setNewsDate(newsDate);
-        result.setMainImage(mainImage);
-/*        List<NewsContent> contentList=new ArrayList<NewsContent>();
-        for(NewsDetailCustom custom:newsDetailCustoms){
-            NewsContent content=new NewsContent();
-            content.setContent(custom.getContent());
-            content.setContentType(custom.getContentType());
-            contentList.add(content);
-        }*/
-
-        return result;
-
-/*        JSONObject response=new JSONObject();
-        if(newsDetailCustoms!=null){
-            response.put("data",newsDetailCustoms);
-            response.put("status","success");
-            response.put("code","success");
-        }else{
-            response.put("data",null);
-            response.put("status","fail");
-            response.put("code","fail");
+        // 获取目标新闻的主要信息
+        NewsList newsMainInfo=newsListMapper.selectNewsListBynewsId(newsId);
+        if(newsMainInfo!=null){
+            newsDetailResult=JSONObject.parseObject(JSONObject.toJSONString(newsMainInfo),NewsDetailResult.class);
         }
-        return response.toJSONString();*/
+
+        // 获取目标新闻的所有新闻片段
+        List<ContentDetail> details=contentDetailMapper.selectContentDetailsByNewsId(newsId);
+        List<NewsDetailResult.Fragment> contents=new ArrayList<>();
+        if(details!=null){
+            for(ContentDetail detail:details){
+                NewsDetailResult.Fragment fragment=newsDetailResult.new Fragment();
+                fragment.setValue(detail.getContent());
+                fragment.setType(detail.getContentType()==0?"text":"img");
+                contents.add(fragment);
+            }
+        }
+        newsDetailResult.setContents(contents);
+
+        // 使用模糊查询功能获取固定的4篇相关文章的列表没有相关的则返回空
+        List<NewsList> newsLists=null;
+        if(newsMainInfo!=null){
+            newsLists=newsListMapper.selectNewsListWhereTitleOrContentLike((String)newsMainInfo.getTitle(),0,4);
+            if(newsLists==null || newsLists.isEmpty())
+                newsLists=new ArrayList<NewsList>();
+        }
+        List<NewsListResult> relations=newsLists2NewsListResults(newsLists);
+        newsDetailResult.setRelations(relations);
+
+        // 获取新闻的所有主题词(标签)
+        String topicWordsString=newsMainInfo.getTopicWord();
+        List<String> topicWordsList=new ArrayList<>();
+        if(topicWordsString!=null && !topicWordsString.isEmpty()){
+            topicWordsList=Arrays.asList(topicWordsString.split(","));
+        }
+        newsDetailResult.setLabels(topicWordsList);
+
+        // TODO: 待自测后加入相应的逻辑
+        newsDetailResult.setHasThumbUp(false);
+        newsDetailResult.setHasCollect(false);
+
+        commonResult.setData(newsDetailResult);
+        commonResult.setSuccess(true);
+        commonResult.setMsg("成功获取新闻详情页");
+        return commonResult;
     }
 
 
     private List<NewsListResult> newsLists2NewsListResults(List<NewsList> newsLists){
         List<NewsListResult> newsListResults=new ArrayList<NewsListResult>();
-        if(newsLists!=null){
+        if(newsLists!=null || !newsLists.isEmpty()){
             for(NewsList news : newsLists){
                 NewsListResult result=JSONObject.parseObject(JSONObject.toJSONString(news),NewsListResult.class);
                 if(result!=null){

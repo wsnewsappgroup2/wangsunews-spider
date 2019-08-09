@@ -7,6 +7,7 @@ import java.util.Date;
 public class NewsList {
     private int id;
 
+    @JSONField(name="column")
     private String label;
 
     private String source;

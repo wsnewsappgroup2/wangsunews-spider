@@ -1,48 +1,68 @@
 package com.crow.result;
 
-import java.util.Date;
 import java.util.List;
 
 /**
  * 用于显示单个新闻页面的相关信息
  * **/
 public class NewsDetailResult {
-    private String label;
+    // 新闻标题
     private String title;
-    private String newsId;
+
+    // 新闻栏目
+    private String cloumn;
+
+    // 新闻id
+    private String id;
+
+    // 新闻来源
     private String source;
-    private Date newsDate;
+    // 新闻时间
+    private String timestamp;
+    // 主图url
     private String mainImage;
 
-    public class NewsContent{
-        String content;
-        String contentType;
-
-        public String getContent() {
-            return content;
+    // 新闻内容片段列表
+    public class Fragment{
+        public String getValue() {
+            return value;
         }
 
-        public void setContent(String content) {
-            this.content = content;
+        public void setValue(String value) {
+            this.value = value;
         }
 
-        public String getContentType() {
-            return contentType;
+        public String getType() {
+            return type;
         }
 
-        public void setContentType(String contentType) {
-            this.contentType = contentType;
+        public void setType(String type) {
+            this.type = type;
         }
+
+        private String value;
+        private String type;
     }
-    private List<NewsContent> newsContents;
+    private List<Fragment> contents;
 
-    public String getLabel() {
-        return label;
-    }
+    // 新闻标签(即数据库中的主题词)
+    private List<String> labels;
 
-    public void setLabel(String label) {
-        this.label = label;
-    }
+    // 相关文章列表
+    private List<NewsListResult> relations;
+
+    // 是否已经点赞
+    private boolean hasThumbUp;
+
+    // 是否已经收藏
+    private boolean hasCollect;
+
+    // 本条新闻的评论数量
+    private Integer commentCount;
+
+
+
+
 
     public String getTitle() {
         return title;
@@ -52,12 +72,20 @@ public class NewsDetailResult {
         this.title = title;
     }
 
-    public String getNewsId() {
-        return newsId;
+    public String getCloumn() {
+        return cloumn;
     }
 
-    public void setNewsId(String newsId) {
-        this.newsId = newsId;
+    public void setCloumn(String cloumn) {
+        this.cloumn = cloumn;
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
     }
 
     public String getSource() {
@@ -68,12 +96,12 @@ public class NewsDetailResult {
         this.source = source;
     }
 
-    public Date getNewsDate() {
-        return newsDate;
+    public String getTimestamp() {
+        return timestamp;
     }
 
-    public void setNewsDate(Date newsDate) {
-        this.newsDate = newsDate;
+    public void setTimestamp(String timestamp) {
+        this.timestamp = timestamp;
     }
 
     public String getMainImage() {
@@ -84,11 +112,51 @@ public class NewsDetailResult {
         this.mainImage = mainImage;
     }
 
-    public List<NewsContent> getNewsContents() {
-        return newsContents;
+    public List<Fragment> getContents() {
+        return contents;
     }
 
-    public void setNewsContents(List<NewsContent> newsContents) {
-        this.newsContents = newsContents;
+    public void setContents(List<Fragment> contents) {
+        this.contents = contents;
+    }
+
+    public List<String> getLabels() {
+        return labels;
+    }
+
+    public void setLabels(List<String> labels) {
+        this.labels = labels;
+    }
+
+    public List<NewsListResult> getRelations() {
+        return relations;
+    }
+
+    public void setRelations(List<NewsListResult> relations) {
+        this.relations = relations;
+    }
+
+    public boolean isHasThumbUp() {
+        return hasThumbUp;
+    }
+
+    public void setHasThumbUp(boolean hasThumbUp) {
+        this.hasThumbUp = hasThumbUp;
+    }
+
+    public boolean isHasCollect() {
+        return hasCollect;
+    }
+
+    public void setHasCollect(boolean hasCollect) {
+        this.hasCollect = hasCollect;
+    }
+
+    public Integer getCommentCount() {
+        return commentCount;
+    }
+
+    public void setCommentCount(Integer commentCount) {
+        this.commentCount = commentCount;
     }
 }
