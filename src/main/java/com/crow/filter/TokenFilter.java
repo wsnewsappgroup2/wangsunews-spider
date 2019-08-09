@@ -71,9 +71,11 @@ public class TokenFilter implements Filter {
         String method=request.getMethod();
         if(method.equals("OPTIONS") || ALLOWED_PATHS.contains(path)){
             // 预请求方法和允许的路径直接通过
-            // response.setStatus(HttpServletResponse.SC_OK);
+            response.setStatus(HttpServletResponse.SC_OK);
             filterChain.doFilter(request,response);
         }else{
+            response.setCharacterEncoding("UTF-8");
+            response.setContentType("application/json;charset=utf-8");
             if(token!=null && !token.isEmpty() && JwtUtil.verify(token)){
                 resultInfo.setSuccess(true);
                 resultInfo.setMsg("用户token验证授权通过");

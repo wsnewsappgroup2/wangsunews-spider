@@ -45,8 +45,6 @@ public class LoginServiceTest {
         if(user!=null){
             System.out.println(user.getOpenid());
             System.out.println(user.getSession_key());
-            System.out.println(user.getUsername());
-            System.out.println(user.getUnionid());
         }
     }
 
@@ -59,9 +57,8 @@ public class LoginServiceTest {
 
         User user=new User();
         user.setOpenid("test_openid");
-        user.setUsername("test_username");
+        user.setNickName("test_nickname");
         user.setSession_key("eeeee");
-        user.setUnionid("xxxx");
         System.out.println("save user successfully");
     }
 }
