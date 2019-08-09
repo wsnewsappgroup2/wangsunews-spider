@@ -1,11 +1,16 @@
 spring:
   datasource:
-    url: jdbc:mysql://127.0.0.1:3306/wsnews?&useSSL=false&characterEncoding=utf-8&serverTimezone=CTT
+#    url: jdbc:mysql://127.0.0.1:3306/wsnews?&useSSL=false&characterEncoding=utf-8&serverTimezone=CTT
+#
+#    username: root
+#    password: 123456
+#    driver-class-name: com.mysql.cj.jdbc.Driver
 
-    username: root
-    password: 123456
-    driver-class-name: com.mysql.cj.jdbc.Driver
 
 
 mybatis:
   type-aliases-package: com.crow.entity
+
+pythonroute:
+#  python-package-root: /usr/wsnews/py/
+python-package-root: D:/myProject/wsnewsappgroup2/wsnews-java/src/main/java/com/crow/pythonscrips/

@@ -11,22 +11,17 @@ import us.codecraft.webmagic.Task;
 import us.codecraft.webmagic.pipeline.Pipeline;
 
 import java.util.Map;
-
 /**
- * Created by CrowHawk on 17/10/6.
+ * @ClassName:CrowProxyProvider
+ * @Author: wuy2
+ * @Description: TODO
+ * @Date: Created in 16:30 2019/8/8
+ * @Version: V1.0
  */
 @Component("PostInfoPipeline")
 public class HupuSpiderPipeline implements Pipeline{
 
-//
-//    @Autowired
-//    private PostMapper postMapper;
-//    @Autowired
-//    private CommentMapper commentMapper;
-//    @Autowired
-//    private TitleWordMapper titleWordMapper;
-//    @Autowired
-//    private UserMapper userMapper;
+
 
     @Autowired
     private NewsListMapper newsListMapper;
@@ -45,12 +40,17 @@ public class HupuSpiderPipeline implements Pipeline{
                     NewsList newsList = new NewsList();
                     newsList.setTitle(post.getTitle());
                     newsList.setSource(post.getSource());
-                    newsList.setLabel("sport");
+                    newsList.setLabel("ent");
                     newsList.setCreateDate(DateUtil.now());
                     newsList.setNewsDate(post.getNewsDate());
                     newsList.setMainImage(post.getMainImage());
                     newsList.setSourceCommentNum(((int)(1+Math.random()*(10-1+1))));
-                    newsListMapper.insertTest(newsList);
+                    if(post.getTopicWord()!=null){
+                        newsList.setTopicWord(post.getTopicWord());
+                    }
+                    if(newsList.getTitle()!="404 Not Found"){
+                        newsListMapper.insertSinaEnt(newsList);
+                    }
                     ContentDetail contentDetail = new ContentDetail();
                     contentDetail.setNewsId(newsList.getId());
                     contentDetail.setContent(post.getContent());
@@ -59,31 +59,6 @@ public class HupuSpiderPipeline implements Pipeline{
                     contentDetailMapper.insert(contentDetail);
                 }
             }
-//            if(entry.getKey().equals("commentInfo")) {
-//                CommentList commentList = (CommentList) entry.getValue();
-//                for(int i = 0; i < commentList.getContentList().size(); i++) {
-//                    Comment comment = new Comment();
-//                    comment.setTitle(commentList.getTitle());
-//                    comment.setContent(commentList.getContentList().get(i).replaceAll("(& nbsp;)", ""));
-//                    comment.setLitNum(Integer.parseInt(commentList.getLitNumList().get(i)));
-//                    comment.setAuthor(commentList.getCommentAuthors().get(i));
-//                    commentMapper.insert(comment);
-//                }
-//            }
-//            if(entry.getKey().equals("titleWordInfo")) {
-//                String[] strings = (String[])entry.getValue();
-//                for(String word: strings) {
-//                    TitleWord titleWord = new TitleWord();
-//                    titleWord.setWord(word);
-//                    titleWordMapper.insert(titleWord);
-//                }
-//            }
-//            if(entry.getKey().equals("userInfo")) {
-//                User user = (User) entry.getValue();
-//                if(user != null) {
-//                    userMapper.insert(user);
-//                }
-//            }
         }
 
     }

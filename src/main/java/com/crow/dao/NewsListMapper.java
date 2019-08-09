@@ -13,14 +13,14 @@ import java.util.List;
 @Mapper
 public interface NewsListMapper {
     @Options(useGeneratedKeys = true, keyProperty = "id")
-    @Insert("insert into news_list (`label`,`source`,`main_image`,`title`,`create_date`,`news_date`) values(#{label},#{source},#{mainImage},#{title},#{createDate},#{newsDate})")
+    @Insert("INSERT INTO news_list (`label`,`source`,`main_image`,`title`,`create_date`,`news_date`) values(#{label},#{source},#{mainImage},#{title},#{createDate},#{newsDate})")
     void insert(NewsList newsList);
 
     @Options(useGeneratedKeys = true, keyProperty = "id")
-    @Insert("insert into news_list (`label`,`source`,`main_image`,`title`,`create_date`,`news_date`，`source_comment_num`,`topic_word`) values(#{label},#{source},#{mainImage},#{title},#{createDate},#{newsDate}),#{sourceCommentNum}),#{topicWord})")
+    @Insert("INSERT INTO news_list (`label`,`source`,`main_image`,`title`,`create_date`,`news_date`,`source_comment_num`,`topic_word`) values(#{label},#{source},#{mainImage},#{title},#{createDate},#{newsDate},#{sourceCommentNum},#{topicWord})")
     void insertSinaEnt(NewsList newsList);
     @Options(useGeneratedKeys = true, keyProperty = "id")
-    @Insert("insert into news_list (`label`,`source`,`main_image`,`title`,`create_date`,`news_date`,`source_comment_num`) values(#{label},#{source},#{mainImage},#{title},#{createDate},#{newsDate},#{sourceCommentNum})")
+    @Insert("INSERT INTO news_list (`label`,`source`,`main_image`,`title`,`create_date`,`news_date`,`source_comment_num`) values(#{label},#{source},#{mainImage},#{title},#{createDate},#{newsDate},#{sourceCommentNum})")
     void insertTest(NewsList newsList);
 
 
@@ -101,4 +101,6 @@ public interface NewsListMapper {
             "WHERE `news_id`=#{newsId} " +
             "ORDER BY `index_id` ASC")
     List<NewsDetailCustom> selectNewsDetailByNewsId(@Param("newsId") String newsId);
+    @Select("SELECT MAX(`id`) FROM news_list")
+    Integer selectMaxId();
 }

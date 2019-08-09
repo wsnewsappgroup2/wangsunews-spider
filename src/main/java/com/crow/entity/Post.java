@@ -15,6 +15,7 @@ public class Post {
     private Date newsDate;
     private String sourceCommentNum;
     private String topicWord;
+    private String label;
 
     public int getId() {
         return id;
@@ -78,5 +79,13 @@ public class Post {
 
     public void setTopicWord(String topicWord) {
         this.topicWord = topicWord;
+    }
+
+    public String getLabel() {
+        return label;
+    }
+
+    public void setLabel(String label) {
+        this.label = label;
     }
 }
