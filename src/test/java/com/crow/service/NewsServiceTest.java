@@ -30,7 +30,7 @@ public class NewsServiceTest {
         int start=2;
         int limit=5;
         String token="public-1232213123";
-        CommonResult<List<NewsListResult>> commonResults=newsService.getNewsListByCloumn(1,start,limit);
+        CommonResult<List<NewsListResult>> commonResults=newsService.getNewsListByColumn(1,start,limit);
         System.out.println("OK");
     }
 

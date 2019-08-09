@@ -38,7 +38,6 @@ public interface NewsListMapper {
     @Select("SELECT ucm.`label_id` AS `label_id`,`column_name` "+
             "FROM `user_column_mapping` ucm LEFT JOIN `label_column_mapping` lcm "+
             "ON ucm.label_id=lcm.label_id")
-    //@ResultMap("labelColumnMappingResultsMap")
     @Results(id = "labelColumnMappingResultsMap2", value = {
             @Result(property = "columnId",column = "label_id"),
             @Result(property = "columnName",column = "column_name")})
@@ -60,31 +59,42 @@ public interface NewsListMapper {
             @Param("start") Integer start,
             @Param("pageSize")Integer pageSize);
 
-
-    // 获取默认的新闻列表结果
-    @Select("SELECT * FROM news_list " +
-            "ORDER BY news_date DESC " +
-            "LIMIT #{start},#{pageSize}")
-    List<NewsList> selectDefaultPagedNewsList(
-            @Param("start") Integer start,
-            @Param("pageSize") Integer pageSize);
-
-
-
-
-
-
-
+    // 根据新闻ID获取新闻信息主要信息列表
+    @Select({"<script> ",
+                "SELECT * FROM `news_list` ",
+                "WHERE news_list.id IN",
+                "<foreach collection='newsIds' item='newsId' open='(' separator=',' close=')'> ",
+                    "#{newsId}",
+                "</foreach>",
+            "</script>"
+    })
+    @ResultMap("newsListResultsMap")
+    List<NewsList> selectNewsListByNewsIds(
+            @Param("newsIds") List<Integer> newsIds
+    );
 
     // 根据新闻标题和内容或标题进行模糊查询
-    @Select("SELECT * FROM news_list " +
-            "WHERE title LIKE %#{title}% " +
+    @Select("SELECT nl.* " +
+            "FROM news_list nl LEFT JOIN content_detail cd " +
+            "ON nl.id=cd.news_id " +
+            "WHERE nl.title LIKE '%#{keyword}%' OR cd.content LIKE '%#{keyword}%' " +
+            "ORDER BY nl.news_date DESC " +
             "LIMIT #{start},#{limit}")
     @ResultMap("newsListResultsMap")
     List<NewsList> selectNewsListWhereTitleOrContentLike(
-            @Param("title") String title,
+            @Param("keyword") String keyword,
             @Param("start") Integer start,
             @Param("limit")Integer limit);
+
+
+
+
+
+
+
+
+
+
 
     // 通过新闻ID 获取新闻的详细信息
     @Select("SELECT `label`,`title`,`news_id` AS newsId, `source`, `news_date` AS newsDate,`content`,`main_image` AS mainImage, `content_type` AS contentType " +

@@ -8,7 +8,7 @@
 	<version>0.0.1-SNAPSHOT</version>
 	<packaging>jar</packaging>
 
-	<name>hupu-spider</name>
+	<name>wsnews-java</name>
 	<description>Demo project for Spring Boot</description>
 
 	<parent>
@@ -89,6 +89,7 @@
 			<groupId>mysql</groupId>
 			<artifactId>mysql-connector-java</artifactId>
 			<!--8.0.11-->
+			<!--5.1.47-->
 			<version>8.0.11</version>
 		</dependency>
 

@@ -1,7 +1,5 @@
 package com.crow.service;
 
-import com.alibaba.fastjson.JSON;
-import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.crow.dao.NewsListMapper;
 import com.crow.entity.NewsList;
@@ -15,9 +13,7 @@ import com.crow.result.ColumnsInfoResult;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 /**
  * Created by wangyq1
@@ -72,47 +68,69 @@ public class NewsService {
     }
 
     /**获取特定栏目的新闻列表**/
-    public CommonResult<List<NewsListResult>> getNewsListByCloumn(Integer columnId, Integer page, Integer pageSize){
-        List<NewsList> newsList=null;
-
-        int start=page*pageSize;
-
-        if(columnId!=-1){
-            // 具体栏目列表
-            newsList=newsListMapper.selectPagedNewsListByLabelId(columnId,start,pageSize);
-        }else{
-            // 默认推荐列表
-            newsList=newsListMapper.selectDefaultPagedNewsList(start,pageSize);
-        }
+    public CommonResult<List<NewsListResult>> getNewsListByColumn(Integer columnId, Integer page, Integer pageSize){
+        List<NewsList> newsLists=null;
+        int start= page==null? 0: page*pageSize;
+        // 具体栏目列表
+        newsLists=newsListMapper.selectPagedNewsListByLabelId(columnId,start,pageSize);
 
         CommonResult<List<NewsListResult>> commonResult=new CommonResult<List<NewsListResult>>();
-        if(newsList==null || newsList.size()<=0){
+        List<NewsListResult> newsListResults=new ArrayList<>();
+        if(newsLists==null || newsLists.isEmpty()){
             commonResult.setMsg("无推荐新闻");
-            commonResult.setSuccess("fail");
-        }
-
-        List<NewsListResult> newsListResults=new ArrayList<NewsListResult>();
-        if(newsList!=null){
-            for(NewsList news : newsList){
-                NewsListResult result=JSONObject.parseObject(JSONObject.toJSONString(news),NewsListResult.class);
-                if(result!=null){
-                    newsListResults.add(result);
-                }
-            }
+            commonResult.setSuccess(false);
+        }else{
+            newsListResults=newsLists2NewsListResults(newsLists);
             commonResult.setMsg("成功推荐新闻");
-            commonResult.setSuccess("success");
+            commonResult.setSuccess(true);
+        }
+        commonResult.setData(newsListResults);
+
+        return commonResult;
+    }
+
+    /**根据标题进行模糊查询**/
+    public CommonResult<List<NewsListResult>> vagueSearch(String keyword, Integer page, Integer pageSize) {
+        int start= page==null? 0 : page*pageSize;
+        List<NewsList> newsLists=newsListMapper.selectNewsListWhereTitleOrContentLike(keyword,start,pageSize);
+
+        CommonResult<List<NewsListResult>> commonResult=new CommonResult<List<NewsListResult>>();
+        List<NewsListResult> newsListResults=new ArrayList<>();
+        if(newsLists==null || newsLists.isEmpty()){
+            commonResult.setMsg("没有找到相似内容");
+            commonResult.setSuccess(false);
+        }else{
+            newsListResults=newsLists2NewsListResults(newsLists);
+            commonResult.setMsg("成功找到结果");
+            commonResult.setSuccess(true);
         }
         commonResult.setData(newsListResults);
         return commonResult;
     }
 
-    /**根据标题进行模糊查询**/
-    public String vagueSearch(String title, Integer start, Integer limit) {
-        List<NewsList> list=newsListMapper.selectNewsListWhereTitleOrContentLike(title,start,limit);
-        return genResponse(list);
+    /**对特定的栏目执行推荐算法做推荐**/
+    public CommonResult<List<NewsListResult>> getRecommendedNewsListByColumnId(Integer columnId){
+        // TODO: 添加推荐算法的调用<到时注意是否有多线程异步等待或者等该过慢的问题>
+        List<Integer> mockRecomendedNewsIds=new ArrayList<Integer>(Arrays.asList(new Integer[]{1,2,3,4,5,6,7,8,9,10}));
+
+        List<NewsList> recommendedNewsList=newsListMapper.selectNewsListByNewsIds(mockRecomendedNewsIds);
+
+        CommonResult<List<NewsListResult>> commonResult=new CommonResult<>();
+        List<NewsListResult> newsListResults=new ArrayList<>();
+        if(recommendedNewsList==null || recommendedNewsList.isEmpty()){
+            commonResult.setMsg("推荐失败");
+            commonResult.setSuccess(false);
+        }else{
+            newsListResults=newsLists2NewsListResults(recommendedNewsList);
+            commonResult.setMsg("推荐成功");
+            commonResult.setSuccess(true);
+        }
+        commonResult.setData(newsListResults);
+
+        return commonResult;
     }
 
-    /**根据newsId获取**/
+    //根据newsId获取
     public NewsDetailResult getSingleNewById(String newsId){
         List<NewsDetailCustom> newsDetailCustoms=newsListMapper.selectNewsDetailByNewsId(newsId);
         // TODO: 转换成DetailResult
@@ -152,22 +170,17 @@ public class NewsService {
         return response.toJSONString();*/
     }
 
-    /**生成响应的JSON字符串**/
-    private String genResponse(List<NewsList> list){
-        JSONObject response=new JSONObject();
 
-        if(list.size()>0){
-            // 获取成功
-            JSONArray array= JSONArray.parseArray(JSON.toJSONString(list));
-            response.put("data",array);
-            response.put("status","success");
-            response.put("code","success");
-        }else{
-            // 获取失败
-            response.put("data",null);
-            response.put("status","fail");
-            response.put("code","fail");
+    private List<NewsListResult> newsLists2NewsListResults(List<NewsList> newsLists){
+        List<NewsListResult> newsListResults=new ArrayList<NewsListResult>();
+        if(newsLists!=null){
+            for(NewsList news : newsLists){
+                NewsListResult result=JSONObject.parseObject(JSONObject.toJSONString(news),NewsListResult.class);
+                if(result!=null){
+                    newsListResults.add(result);
+                }
+            }
         }
-        return response.toJSONString();
+        return newsListResults;
     }
 }
