@@ -3,11 +3,13 @@ package com.crow.controller;
 import com.crow.entity.custom.UserCommentCustom;
 import com.crow.result.*;
 import com.crow.service.NewsService;
+import com.crow.service.UserCommentService;
 import com.crow.utils.JwtUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by wangyq1
@@ -18,6 +20,8 @@ public class NewsController {
 
     @Autowired
     private NewsService newsService;
+    @Autowired
+    UserCommentService userCommentService;
 
     /**查询用户个人栏目列表**/
     @GetMapping(value = "/wsnews/query_private_column")
@@ -64,10 +68,18 @@ public class NewsController {
     }
 
     /**单个新闻信息页**/
-    @GetMapping(value = "/wsnews/new_info/{newsId}")
+    @GetMapping(value = "/wsnews/news_info/{newsId}")
     public CommonResult<NewsDetailResult> getSingleNew(
             @PathVariable("newsId") Integer newsId){
         return newsService.getSingleNewsContentById(newsId);
+    }
+
+
+    /**获取与单个新闻列表相关评论**/
+    @GetMapping(value = "/wsnews/news/news_comments/{newsId}")
+    public CommonResult<List<NewsCommentResult>> getNewsCommentsByNewsId(
+            @PathVariable("newsId") Integer newsId){
+        return userCommentService.getLatestCommentsByNewsId(newsId);
     }
 
 }
