@@ -16,20 +16,10 @@ CREATE TABLE IF NOT EXISTS `news_list` (
 CREATE TABLE IF NOT EXISTS `content_detail` (
   `id` int(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
   `news_id` int(11) NOT NULL,
-  `content` varchar(2000) COLLATE utf8_unicode_ci NOT NULL,
+  `content` VARCHAR(8000) COLLATE utf8_unicode_ci NOT NULL,
   `content_type` int(1) NOT NULL,
   `index_id` int(4) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
-
--- 用户评论表
-CREATE TABLE IF NOT EXISTS `comment_detail` (
-  `id` int(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
-  `news_id` int(11) NOT NULL,
-  `author` varchar(20) COLLATE utf8_unicode_ci NOT NULL,
-  `comment` varchar(256) COLLATE utf8_unicode_ci NOT NULL,
-  `index_id` int(4) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
-
 
 
 -- 用户信息表
@@ -50,7 +40,7 @@ CREATE TABLE `user` (
 -- 新闻栏目ID和栏目信息映射表
 CREATE TABLE IF NOT EXISTS `label_column_mapping` (
   `label_id` INT(11) AUTO_INCREMENT NOT NULL PRIMARY KEY,
-  `label` VARCHAR(64) NOT NULL,
+  `label` VARCHAR(64) NOT NULL UNIQUE KEY,
   `column_name` VARCHAR(60) COLLATE UTF8_UNICODE_CI NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=UTF8_UNICODE_CI;
 INSERT INTO `label_column_mapping`(`label`,`column_name`) VALUES ('sport','体育');
@@ -68,5 +58,53 @@ CREATE TABLE IF NOT EXISTS `user_column_mapping`(
 	CONSTRAINT FOREIGN KEY(`label_id`) REFERENCES `label_column_mapping`(`label_id`)
 	ON DELETE CASCADE ON UPDATE CASCADE
 )ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=UTF8_UNICODE_CI;
+
+
+-- 点击记录表
+CREATE TABLE IF NOT EXISTS `user_clicks`(
+	`id` INT(11) AUTO_INCREMENT NOT NULL PRIMARY KEY,
+	`user_id` INT(11) NOT NULL,
+	`news_id` INT(11) NOT NULL,
+	`start_time` DATETIME NOT NULL,
+	`duration` INT(11) DEFAULT NULL,
+	`label` VARCHAR(64) NOT NULL,
+	CONSTRAINT FOREIGN KEY(`user_id`) REFERENCES `user`(`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+	CONSTRAINT FOREIGN KEY(`label`) REFERENCES `label_column_mapping`(`label`) ON DELETE CASCADE ON UPDATE CASCADE
+)ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=UTF8_UNICODE_CI;
+
+
+-- 用户评论记录表
+CREATE TABLE IF NOT EXISTS `user_comment`(
+  `id` INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
+  `user_id` INT(11) NOT NULL,
+  `news_id` INT(11) NOT NULL,
+  `nick_name` VARCHAR(20) COLLATE utf8_unicode_ci NOT NULL,
+  `comment` VARCHAR(1500) COLLATE utf8_unicode_ci NOT NULL,
+  `created_date` DATETIME NOT NULL,
+  	CONSTRAINT FOREIGN KEY(`user_id`) REFERENCES `user`(`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+	CONSTRAINT FOREIGN KEY(`news_id`) REFERENCES `news_list`(`id`) ON DELETE CASCADE ON UPDATE CASCADE
+)ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=UTF8_UNICODE_CI;
+
+
+
+-- 收藏记录表
+CREATE TABLE IF NOT EXISTS `user_collection`(
+	`id` INT(11) AUTO_INCREMENT NOT NULL PRIMARY KEY,
+	`user_id` INT(11) NOT NULL,
+	`news_id` INT(11) NOT NULL,
+	CONSTRAINT FOREIGN KEY(`user_id`) REFERENCES `user`(`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+	CONSTRAINT FOREIGN KEY(`news_id`) REFERENCES `news_list`(`id`) ON DELETE CASCADE ON UPDATE CASCADE
+)ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=UTF8_UNICODE_CI;
+
+-- 点赞记录表
+CREATE TABLE IF NOT EXISTS `user_thumbsup`(
+	`id` INT(11) AUTO_INCREMENT NOT NULL PRIMARY KEY,
+	`user_id` INT(11) NOT NULL,
+	`news_id` INT(11) NOT NULL,
+	CONSTRAINT FOREIGN KEY(`user_id`) REFERENCES `user`(`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+	CONSTRAINT FOREIGN KEY(`news_id`) REFERENCES `news_list`(`id`) ON DELETE CASCADE ON UPDATE CASCADE
+)ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=UTF8_UNICODE_CI;
+
+
 
 
