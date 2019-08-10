@@ -1,12 +1,21 @@
 package com.crow.result;
 
 public class NewsCommentResult {
+    private Integer id;
     private Integer userId;
     private String nickName;
     private String timestamp;
     private String userAvatar;
     private String comment;
 
+
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
+    }
 
     public Integer getUserId() {
         return userId;
