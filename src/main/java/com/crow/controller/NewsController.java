@@ -1,9 +1,7 @@
 package com.crow.controller;
 
-import com.crow.result.CommonResult;
-import com.crow.result.NewsDetailResult;
-import com.crow.result.NewsListResult;
-import com.crow.result.ColumnsInfoResult;
+import com.crow.entity.custom.UserCommentCustom;
+import com.crow.result.*;
 import com.crow.service.NewsService;
 import com.crow.utils.JwtUtil;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -71,4 +69,5 @@ public class NewsController {
             @PathVariable("newsId") Integer newsId){
         return newsService.getSingleNewsContentById(newsId);
     }
+
 }
