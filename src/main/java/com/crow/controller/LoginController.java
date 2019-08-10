@@ -2,11 +2,10 @@ package com.crow.controller;
 
 import com.alibaba.fastjson.JSONObject;
 import com.crow.service.LoginService;
-import com.crow.utils.JwtUtil;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.util.Map;
 
@@ -16,7 +15,7 @@ import java.util.Map;
  */
 @RestController
 public class LoginController {
-    private static Logger logger = LoggerFactory.getLogger(LoginController.class);
+
     @Autowired
     private LoginService loginService;
 
@@ -25,17 +24,6 @@ public class LoginController {
             @RequestBody(required = false) Map<String, String> map){
         // 静默登录
         JSONObject validateResponse= loginService.silentLogin(map.get("code"));
-        String openid=validateResponse.getString("open_id");
-
-        String token = null;
-        try {
-            token = JwtUtil.sign(openid);
-        }catch (Exception e){
-            logger.error("[Error When Verifying Token]:\n",e);
-        }
-
-        validateResponse.remove("open_id");
-        validateResponse.put("token",token);
         return validateResponse.toJSONString();
     }
 

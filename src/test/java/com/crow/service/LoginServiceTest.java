@@ -48,17 +48,4 @@ public class LoginServiceTest {
         }
     }
 
-    @Test
-    public void testSaveUser()throws Exception{
-        String openid="";
-        Class<?extends LoginService> loginServiceClass=loginService.getClass();
-        Method method=loginServiceClass.getDeclaredMethod("saveUserByValidateResult",User.class);
-        method.setAccessible(true);
-
-        User user=new User();
-        user.setOpenid("test_openid");
-        user.setNickName("test_nickname");
-        user.setSession_key("eeeee");
-        System.out.println("save user successfully");
-    }
 }

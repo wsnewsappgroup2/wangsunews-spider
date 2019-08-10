@@ -169,7 +169,7 @@ public class NewsService {
         newsDetailResult.setRelations(relations);
 
         // 获取新闻的所有主题词(标签)
-        String topicWordsString=newsMainInfo.getTopicWord();
+        String topicWordsString= newsMainInfo==null? null:newsMainInfo.getTopicWord();
         List<String> topicWordsList=new ArrayList<>();
         if(topicWordsString!=null && !topicWordsString.isEmpty()){
             topicWordsList=Arrays.asList(topicWordsString.split(","));
@@ -189,14 +189,17 @@ public class NewsService {
 
     private List<NewsListResult> newsLists2NewsListResults(List<NewsList> newsLists){
         List<NewsListResult> newsListResults=new ArrayList<NewsListResult>();
-        if(newsLists!=null || !newsLists.isEmpty()){
-            for(NewsList news : newsLists){
-                NewsListResult result=JSONObject.parseObject(JSONObject.toJSONString(news),NewsListResult.class);
-                if(result!=null){
-                    newsListResults.add(result);
-                }
+        if(newsLists==null || newsLists.isEmpty()){
+            return newsListResults;
+        }
+
+        for(NewsList news : newsLists){
+            NewsListResult result=JSONObject.parseObject(JSONObject.toJSONString(news),NewsListResult.class);
+            if(result!=null){
+                newsListResults.add(result);
             }
         }
+
         return newsListResults;
     }
 }
