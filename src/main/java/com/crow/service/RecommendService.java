@@ -45,6 +45,7 @@ public class RecommendService {
         String line =null;
         BufferedReader in;
         String[] arguments = new String[] {"python",pythonRoute+(algorithm.getAlgorithmType()),useridstr,labelType.getLabel(),operation};   //这里构建要在cmd中输入的参数，第二个参数表示.py文件的路径，第二个之后的参数都表示要传给.py文件的参数，可以根据.py文件的需求写
+        String[] arguments1 = new String[] {"python",pythonRoute+(algorithm.getAlgorithmType()),useridstr,labelType.getLabel(),operation};   //这里构建要在cmd中输入的参数，第二个参数表示.py文件的路径，第二个之后的参数都表示要传给.py文件的参数，可以根据.py文件的需求写
         try {
             process = Runtime.getRuntime().exec(arguments);
             in = new BufferedReader(new InputStreamReader(process.getInputStream()));
@@ -72,7 +73,7 @@ public class RecommendService {
     }
 
     public static void main(String[] args) {
-        String ids= "1, 22, 33, 4 , 5 , 6";
+        String ids= "746, 747, 748, 752, 500, 503, 745, 489, 449, 754";
         List<Long> listIds = Arrays.asList(ids.split(",")).stream().map(s -> Long.parseLong(s.trim())).collect(Collectors.toList());
         System.out.println(Arrays.toString(listIds .toArray()));
     }

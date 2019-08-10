@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -30,7 +31,14 @@ public class TestController {
         logger.info("Test Controller Log Info");
         List<Integer> result;
         result= recommendService.getRecommend(1, AlgorithmType.HOT_BASED_RECOMMEND, LabelType.SPORT_COLOUMN,"1");
-        logger.info("java得到的结果"+result.toString());
+        logger.info("java得到的结果1"+ Arrays.toString(result .toArray()));
+        result= recommendService.getRecommend(1, AlgorithmType.CONTTENT_BASED_RECONMMEND, LabelType.SPORT_COLOUMN,"1");
+        logger.info("java得到的结果2"+ Arrays.toString(result .toArray()));
+        result= recommendService.getRecommend(1, AlgorithmType.UCF_BASED_RECOMMEND, LabelType.SPORT_COLOUMN,"1");
+        logger.info("java得到的结果3"+ Arrays.toString(result .toArray()));
+
+//        result= recommendService.getRecommend(1, AlgorithmType.CONTTENT_BASED_RECONMMEND, LabelType.SPORT_COLOUMN,"1");
+//        logger.info("java得到的结果"+ Arrays.toString(result .toArray()));
 
 //        Process proc;
 //        try {

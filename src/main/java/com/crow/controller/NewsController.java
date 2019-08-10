@@ -1,15 +1,16 @@
 package com.crow.controller;
 
-import com.crow.entity.custom.UserCommentCustom;
 import com.crow.result.*;
 import com.crow.service.NewsService;
 import com.crow.service.UserCommentService;
 import com.crow.utils.JwtUtil;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestHeader;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
-import java.util.Map;
 
 /**
  * Created by wangyq1
@@ -50,11 +51,12 @@ public class NewsController {
     }
 
     /**下拉获取推荐新闻**/
-    @GetMapping(value = "/wsnews/query_news/{columnId}")
+    @GetMapping(value = "/wsnews/news_recommend/{columnId}")
     public CommonResult<List<NewsListResult>> getRecommendedNewsList(
             @RequestHeader(value = "Authorization",required = false) String token,
             @PathVariable(value = "columnId",required = false) Integer columnId){
-        return newsService.getRecommendedNewsListByColumnId(columnId);
+        String openId=JwtUtil.getOpenid(token);
+        return newsService.getRecommendedNewsListByColumnId(columnId,openId);
     }
 
     /**新闻搜索**/

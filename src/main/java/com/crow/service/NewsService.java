@@ -113,7 +113,7 @@ public class NewsService {
     }
 
     /**对特定的栏目执行推荐算法做推荐**/
-    public CommonResult<List<NewsListResult>> getRecommendedNewsListByColumnId(Integer columnId){
+    public CommonResult<List<NewsListResult>> getRecommendedNewsListByColumnId(Integer columnId,String openId){
         // TODO: 添加推荐算法的调用<到时注意是否有多线程异步等待或者等该过慢的问题>
         List<Integer> mockRecomendedNewsIds=new ArrayList<Integer>(Arrays.asList(new Integer[]{1,2,3,4,5,6,7,8,9,10}));
 
