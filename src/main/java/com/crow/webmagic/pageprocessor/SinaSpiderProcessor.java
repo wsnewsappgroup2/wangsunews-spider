@@ -1,5 +1,6 @@
 package com.crow.webmagic.pageprocessor;
 
+import com.crow.entity.Post;
 import com.crow.utils.ProxyGeneratedUtil;
 import com.crow.utils.URLGeneratedUtil;
 import com.crow.utils.UserAgentUtil;
@@ -95,9 +96,9 @@ public class SinaSpiderProcessor extends BaseProcessor {
         String sourceCommentNum =  page.getHtml().xpath("//*[@id=\"bottom_sina_comment\"]/div[1]/div[1]/span[1]/em[1]/a/text()").toString();
         //主题词
         String topicWord =  page.getHtml().xpath("/html/head/meta[@name=\"keywords\"]/@content").toString();
-
-        setPost(title, content, comFrom, mainImage,newsDate,sourceCommentNum,topicWord,page,"yyyy年MM月dd日 HH:mm:ss","ent");
-
+        Post post = new Post();
+        post=setPost(title, content, comFrom, mainImage,newsDate,sourceCommentNum,topicWord,page,"yyyy年MM月dd日 HH:mm:ss","ent",post);
+        page.putField("postInfo", post);
     }
 
 

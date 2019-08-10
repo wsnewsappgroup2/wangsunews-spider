@@ -19,23 +19,24 @@ public class BaseProcessor extends AbstractProcessor {
      * @param title 帖子标题
      * @param page 当前页面对象
      */
-    public void setPost(String title, String content,
+    public Post setPost(String title, String content,
                          String source, String mainImage,
                          String newsDate, String sourceCommentNum,
-                         String topicWord, Page page,String dateFormat,String label) {
-        Post post = new Post();
-        simplePostWapper(title,content,source,mainImage,newsDate,dateFormat,label,post);
-        extendPostWrapper(sourceCommentNum,topicWord,post);
-        page.putField("postInfo", post);
+                         String topicWord, Page page,String dateFormat,String label,Post post) {
+//        Post post = new Post();
+        post =simplePostWapper(title,content,source,mainImage,newsDate,dateFormat,label,post);
+        post = extendPostWrapper(sourceCommentNum,topicWord,post);
+        return post;
+//        page.putField("postInfo", post);
     }
-    public void setPost(String title, String content,
+    public Post setPost(String title, String content,
                         String source, String mainImage,
-                        String newsDate, Page page,String dateFormat,String label) {
-        Post post = new Post();
-        simplePostWapper(title,content,source,mainImage,newsDate,dateFormat,label,post);
-        page.putField("postInfo", post);
+                        String newsDate, Page page,String dateFormat,String label,Post post) {
+//        Popost = new Post();
+        post=simplePostWapper(title,content,source,mainImage,newsDate,dateFormat,label,post);
+        return  post;
     }
-    private void simplePostWapper(String title, String content, String source, String mainImage,
+    private Post simplePostWapper(String title, String content, String source, String mainImage,
                                   String newsDate,String dateFormat,String label,Post post){
 
         post.setTitle(title);
@@ -51,10 +52,12 @@ public class BaseProcessor extends AbstractProcessor {
         }
         post.setNewsDate(newsdate);
         post.setLabel(label);
+        return post;
 
     }
-    private void extendPostWrapper(String sourceCommentNum, String topicWord,Post post){
+    private Post extendPostWrapper(String sourceCommentNum, String topicWord,Post post){
         post.setSourceCommentNum(sourceCommentNum);
         post.setTopicWord(topicWord);
+        return post;
     }
 }
