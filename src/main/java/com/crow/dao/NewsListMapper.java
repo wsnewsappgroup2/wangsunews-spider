@@ -2,7 +2,6 @@ package com.crow.dao;
 
 import com.crow.entity.NewsList;
 import com.crow.entity.custom.ColumnInfoCustom;
-import com.crow.entity.custom.NewsDetailCustom;
 import com.crow.entity.custom.PersonalColumnInfoCustom;
 import org.apache.ibatis.annotations.*;
 import org.springframework.stereotype.Component;
@@ -76,7 +75,7 @@ public interface NewsListMapper {
     @Select("SELECT nl.* " +
             "FROM news_list nl LEFT JOIN content_detail cd " +
             "ON nl.id=cd.news_id " +
-            "WHERE nl.title LIKE '%#{keyword}%' OR cd.content LIKE '%#{keyword}%' " +
+            "WHERE nl.title LIKE CONCAT('%',#{keyword},'%') OR cd.content LIKE CONCAT('%',#{keyword},'%') " +
             "ORDER BY nl.news_date DESC " +
             "LIMIT #{start},#{limit}")
     @ResultMap("newsListResultsMap")
@@ -86,21 +85,13 @@ public interface NewsListMapper {
             @Param("limit")Integer limit);
 
 
+    // 通过新闻ID查询新闻的主要信息
+    @Select("SELECT * FROM `news_list` WHERE `id`=#{newsId}")
+    @ResultMap("newsListResultsMap")
+    NewsList selectNewsListBynewsId(@Param("newsId") Integer newsId);
 
 
-
-
-
-
-
-
-
-    // 通过新闻ID 获取新闻的详细信息
-    @Select("SELECT `label`,`title`,`news_id` AS newsId, `source`, `news_date` AS newsDate,`content`,`main_image` AS mainImage, `content_type` AS contentType " +
-            "FROM `content_detail` LEFT JOIN `news_list` ON `content_detail`.news_id=`news_list`.id " +
-            "WHERE `news_id`=#{newsId} " +
-            "ORDER BY `index_id` ASC")
-    List<NewsDetailCustom> selectNewsDetailByNewsId(@Param("newsId") String newsId);
+    // 获取最大的新闻ID
     @Select("SELECT MAX(`id`) FROM news_list")
     Integer selectMaxId();
 }
