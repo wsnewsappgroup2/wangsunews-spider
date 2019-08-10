@@ -7,13 +7,11 @@ import com.auth0.jwt.exceptions.JWTDecodeException;
 import com.auth0.jwt.interfaces.DecodedJWT;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.context.annotation.PropertySource;
-import org.springframework.stereotype.Component;
 
-import javax.servlet.http.HttpServletRequest;
-import java.io.UnsupportedEncodingException;
+import java.text.SimpleDateFormat;
 import java.util.Base64;
 import java.util.Date;
+import java.util.TimeZone;
 
 
 public class JwtUtil {
@@ -28,18 +26,18 @@ public class JwtUtil {
      */
     public static boolean verify(String token) {
         try {
-            String encryptJWTKey = "encryptJWTKey";
+            String openid=getOpenid(token);
+            String encryptJWTKey = "why_key_Hello_scp_049";
             // 帐号加JWT私钥加密
-            String secret = Base64ConvertUtil.decode(encryptJWTKey);
+            String secret =openid + Base64.getEncoder().encodeToString(encryptJWTKey.getBytes());
             //根据密码生成JWT效验器
             Algorithm algorithm = Algorithm.HMAC256(secret);
-            JWTVerifier verifier = JWT.require(algorithm)
-                    .build();
+            JWTVerifier verifier = JWT.require(algorithm).build();
             //效验TOKEN
             DecodedJWT jwt = verifier.verify(token);
             return true;
         }catch (Exception e){
-            logger.error("TOKEN verify" + e.getMessage());
+            logger.error("TOKEN verify" + e);
             return false;
         }
     }
@@ -90,8 +88,13 @@ public class JwtUtil {
             String encryptJWTKey = "why_key_Hello_scp_049";
             // 帐号加JWT私钥加密
             String secret = openid + Base64.getEncoder().encodeToString(encryptJWTKey.getBytes());
-            String accessTokenExpireTime = "36000000000000000";//毫秒
-            Date date = new Date(System.currentTimeMillis() + Long.parseLong(accessTokenExpireTime) * 1000);
+
+            // 设置过期时间
+            String timeStr = "3030-10-10 11:17:10";
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+            sdf.setTimeZone(TimeZone.getTimeZone("Asia/Shanghai"));
+            Date date = sdf.parse(timeStr);
+
             Algorithm algorithm = Algorithm.HMAC256(secret);
             // 附带username,hotel信息
             return JWT.create()

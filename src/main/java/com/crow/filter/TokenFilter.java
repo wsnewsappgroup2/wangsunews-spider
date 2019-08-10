@@ -5,6 +5,7 @@ import com.crow.result.ResultInfo;
 import com.crow.utils.JwtUtil;
 import org.springframework.core.annotation.Order;
 import org.springframework.http.HttpStatus;
+import org.springframework.stereotype.Component;
 
 import javax.servlet.*;
 import javax.servlet.annotation.WebFilter;
@@ -29,6 +30,7 @@ import java.util.Set;
  */
 @WebFilter(urlPatterns = "/*")
 @Order(3)
+@Component
 public class TokenFilter implements Filter {
     private static final Set<String> ALLOWED_PATHS =
             Collections.unmodifiableSet(

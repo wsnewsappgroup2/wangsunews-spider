@@ -11,9 +11,12 @@ import java.util.List;
 public interface UserMapper {
 
     @Options(useGeneratedKeys = true, keyProperty = "id")
-    @Insert("insert into user (`openid`,`session_key`) " +
-            "values(#{openid},#{session_key})")
-    void insert(User user);
+    @Insert("INSERT INTO `user` (`openid`,`token`,`session_key`) " +
+            "values(#{openId},#{token},#{sessionKey})")
+    void insertUserBasicInfo(
+            @Param("openId") String openId,
+            @Param("token") String token,
+            @Param("sessionKey") String sessionKey);
 
     @Select("SELECT * FROM `user` " +
             "WHERE openid = #{openid}")
@@ -24,4 +27,9 @@ public interface UserMapper {
             "WHERE openid=#{openid}")
     void updateSesssionKeyByOpenId(@Param("openid") String openId,
                                    @Param("session_key") String sessionKey);
+
+    @Insert("INSERT INTO `user_column_mapping`(`openid`,`label_id`) VALUES(#{openId},#{labelId})")
+    void inserDefaultUserColumnMapping(
+            @Param("openId") String openId,
+            @Param("labelId") Integer labelId);
 }

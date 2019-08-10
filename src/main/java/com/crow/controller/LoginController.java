@@ -16,7 +16,7 @@ import java.util.Map;
  */
 @RestController
 public class LoginController {
-    private static Logger logger = LoggerFactory.getLogger(LoginController.class);
+
     @Autowired
     private LoginService loginService;
 
@@ -25,17 +25,6 @@ public class LoginController {
             @RequestBody(required = false) Map<String, String> map){
         // 静默登录
         JSONObject validateResponse= loginService.silentLogin(map.get("code"));
-        String openid=validateResponse.getString("open_id");
-
-        String token = null;
-        try {
-            token = JwtUtil.sign(openid);
-        }catch (Exception e){
-            logger.error("[Error When Verifying Token]:\n",e);
-        }
-
-        validateResponse.remove("open_id");
-        validateResponse.put("token",token);
         return validateResponse.toJSONString();
     }
 

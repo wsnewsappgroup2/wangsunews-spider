@@ -2,10 +2,14 @@ package com.crow.service;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
+import com.crow.controller.LoginController;
 import com.crow.dao.UserMapper;
 import com.crow.entity.User;
 import com.crow.utils.HttpClientUtil;
+import com.crow.utils.JwtUtil;
 import com.crow.utils.WechatApiUtil;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -18,6 +22,7 @@ import java.util.Map;
  */
 @Service
 public class LoginService {
+    private static Logger logger = LoggerFactory.getLogger(LoginController.class);
 
     @Autowired
     UserMapper userMapper;
@@ -27,36 +32,49 @@ public class LoginService {
         // 向微信请求授权登录
         JSONObject validateResult= validateByWechat(code);
         int errorCode=validateResult.getIntValue("errcode");
-        User user=null;
-
-        if(errorCode==0){
-            // 授权请求成功
-            user= getUserByValidateResult(validateResult);
-        }
 
         JSONObject validateResponse=new JSONObject();
-        if(user!=null){
-            // 登录授权成功响应
-            validateResponse.put("msg","Login Successfully");
-            validateResponse.put("open_id",user.getOpenid());
-            validateResponse.put("success",true);
-        }else{
-            switch (errorCode){
-                case 40029:
-                    // 无效的临时登录凭证 code
-                case -1:
-                    // 系统繁忙，此时请开发者稍候再试
-                case 45011:
-                    // 频率限制，每个用户每分钟100次
-                default:
-                    // 异常响应码
-                    break;
-            }
+        if(errorCode!=0){
             // 登录授权失败响应
             validateResponse.put("msg","Login Failed Error Code: "+errorCode);
-            validateResponse.put("open_id",null);
+            validateResponse.put("token",null);
             validateResponse.put("success",false);
+        }else{
+            // 登录授权成功响应
+            validateResponse.put("msg","Login Successfully");
+            String openid=validateResult.getString("openid");
+            String token = null;
+            try {
+                token = JwtUtil.sign(openid);
+
+                // 尝试从数据库中获取
+                User user=null;
+                user=getUserByOpenId(openid);
+
+                // 存在用户则更新session_key否则插入新的用户
+                if(user!=null){
+                    userMapper.updateSesssionKeyByOpenId(openid,validateResult.getString("session_key"));
+                }else{
+                    user= JSON.toJavaObject(validateResult,User.class);
+                    user.setToken(token);
+                    userMapper.insertUserBasicInfo(openid,token,validateResult.getString("session_key"));
+                    // 给用户添加默认的栏目收藏
+                    userMapper.inserDefaultUserColumnMapping(openid,1);
+                    userMapper.inserDefaultUserColumnMapping(openid,2);
+                    userMapper.inserDefaultUserColumnMapping(openid,3);
+                    userMapper.inserDefaultUserColumnMapping(openid,4);
+                }
+                validateResponse.put("token",token);
+                validateResponse.put("success",true);
+                validateResponse.put("msg","Got Token Successfully");
+            }catch (Exception e){
+                logger.error("[Error When Verifying Token]:\n",e);
+                validateResponse.put("msg","Error When Getting Token");
+                validateResponse.put("token",null);
+                validateResponse.put("success",false);
+            }
         }
+
         return validateResponse;
     }
 
@@ -76,32 +94,15 @@ public class LoginService {
         return jsonObject;
     }
 
-    /**获取授权的用户信息，如果是初次使用则会先保存用户信息**/
-    private User getUserByValidateResult(JSONObject validateResult){
-        String openid=validateResult.getString("openid");
-
-        // 尝试从数据库中获取
-        User user=null;
-        user=getUserByOpenId(openid);
-
-        // 存在用户则更新session_key否则插入新的用户
-        if(user!=null){
-            userMapper.updateSesssionKeyByOpenId(openid,validateResult.getString("session_key"));
-        }else{
-            user= JSON.toJavaObject(validateResult,User.class);
-            saveUserByValidateResult(user);
-        }
-        return user;
-    }
 
     /**从数据库中获取对应的用户信息**/
     private User getUserByOpenId(String openid){
         List<User> users=userMapper.getUser(openid);
-        return users.size()<=0? null:users.get(0);
+        if(users==null || users.isEmpty()){
+            return null;
+        }else{
+            return users.get(0);
+        }
     }
 
-    /**插入新的用户信息**/
-    private void saveUserByValidateResult(User user){
-        userMapper.insert(user);
-    }
 }

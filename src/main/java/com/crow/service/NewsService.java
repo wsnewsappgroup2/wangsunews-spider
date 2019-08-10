@@ -113,7 +113,7 @@ public class NewsService {
     }
 
     /**对特定的栏目执行推荐算法做推荐**/
-    public CommonResult<List<NewsListResult>> getRecommendedNewsListByColumnId(Integer columnId){
+    public CommonResult<List<NewsListResult>> getRecommendedNewsListByColumnId(Integer columnId,String openId){
         // TODO: 添加推荐算法的调用<到时注意是否有多线程异步等待或者等该过慢的问题>
         List<Integer> mockRecomendedNewsIds=new ArrayList<Integer>(Arrays.asList(new Integer[]{1,2,3,4,5,6,7,8,9,10}));
 
@@ -169,7 +169,7 @@ public class NewsService {
         newsDetailResult.setRelations(relations);
 
         // 获取新闻的所有主题词(标签)
-        String topicWordsString=newsMainInfo.getTopicWord();
+        String topicWordsString= newsMainInfo==null? null:newsMainInfo.getTopicWord();
         List<String> topicWordsList=new ArrayList<>();
         if(topicWordsString!=null && !topicWordsString.isEmpty()){
             topicWordsList=Arrays.asList(topicWordsString.split(","));
@@ -189,14 +189,17 @@ public class NewsService {
 
     private List<NewsListResult> newsLists2NewsListResults(List<NewsList> newsLists){
         List<NewsListResult> newsListResults=new ArrayList<NewsListResult>();
-        if(newsLists!=null || !newsLists.isEmpty()){
-            for(NewsList news : newsLists){
-                NewsListResult result=JSONObject.parseObject(JSONObject.toJSONString(news),NewsListResult.class);
-                if(result!=null){
-                    newsListResults.add(result);
-                }
+        if(newsLists==null || newsLists.isEmpty()){
+            return newsListResults;
+        }
+
+        for(NewsList news : newsLists){
+            NewsListResult result=JSONObject.parseObject(JSONObject.toJSONString(news),NewsListResult.class);
+            if(result!=null){
+                newsListResults.add(result);
             }
         }
+
         return newsListResults;
     }
 }

@@ -50,11 +50,12 @@ public class NewsController {
     }
 
     /**下拉获取推荐新闻**/
-    @GetMapping(value = "/wsnews/query_news/{columnId}")
+    @GetMapping(value = "/wsnews/news_recommend/{columnId}")
     public CommonResult<List<NewsListResult>> getRecommendedNewsList(
             @RequestHeader(value = "Authorization",required = false) String token,
             @PathVariable(value = "columnId",required = false) Integer columnId){
-        return newsService.getRecommendedNewsListByColumnId(columnId);
+        String openId=JwtUtil.getOpenid(token);
+        return newsService.getRecommendedNewsListByColumnId(columnId,openId);
     }
 
     /**新闻搜索**/
