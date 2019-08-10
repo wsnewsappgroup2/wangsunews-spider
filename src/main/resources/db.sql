@@ -17,7 +17,7 @@ CREATE TABLE `news_list` (
 CREATE TABLE `content_detail` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `news_id` int(11) NOT NULL,
-  `content` varchar(2000) COLLATE utf8_unicode_ci NOT NULL,
+  `content` varchar(8000) COLLATE utf8_unicode_ci NOT NULL,
   `content_type` int(1) NOT NULL,
   `index_id` int(4) NOT NULL,
   PRIMARY KEY (`id`)

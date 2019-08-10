@@ -34,29 +34,30 @@ public class HupuSpiderPipeline implements Pipeline{
 
         for(Map.Entry<String, Object> entry : resultItems.getAll().entrySet()) {
 
-            if(entry.getKey().equals("postInfo")) {
+            if("postInfo".equals(entry.getKey())) {
                 Post post = (Post) entry.getValue();
                 if(post != null) {
                     NewsList newsList = new NewsList();
                     newsList.setTitle(post.getTitle());
                     newsList.setSource(post.getSource());
-                    newsList.setLabel("ent");
+                    newsList.setLabel(post.getLabel());
                     newsList.setCreateDate(DateUtil.now());
                     newsList.setNewsDate(post.getNewsDate());
                     newsList.setMainImage(post.getMainImage());
                     newsList.setSourceCommentNum(((int)(1+Math.random()*(10-1+1))));
+                    newsList.setTopicWord("新闻");
                     if(post.getTopicWord()!=null){
                         newsList.setTopicWord(post.getTopicWord());
                     }
-                    if(newsList.getTitle()!="404 Not Found"){
-                        newsListMapper.insertSinaEnt(newsList);
+                    if(!"404 Not Found".equals(newsList.getTitle())){//空指针，还有字符串
+                        this.newsListMapper.insertTest(newsList);
                     }
                     ContentDetail contentDetail = new ContentDetail();
                     contentDetail.setNewsId(newsList.getId());
                     contentDetail.setContent(post.getContent());
                     contentDetail.setContentType(0);
                     contentDetail.setIndexId(0);
-                    contentDetailMapper.insert(contentDetail);
+                    this.contentDetailMapper.insert(contentDetail);
                 }
             }
         }

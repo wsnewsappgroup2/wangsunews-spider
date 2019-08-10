@@ -49,8 +49,8 @@ public class TokenFilter implements Filter {
 
     @Override
     public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain) throws IOException, ServletException {
-        doFilterByToken(servletRequest,servletResponse,filterChain);
-        // filterChain.doFilter(servletRequest,servletResponse);
+        //doFilterByToken(servletRequest,servletResponse,filterChain);
+        filterChain.doFilter(servletRequest,servletResponse);
     }
 
     @Override
@@ -71,6 +71,7 @@ public class TokenFilter implements Filter {
         String method=request.getMethod();
         if(method.equals("OPTIONS") || ALLOWED_PATHS.contains(path)){
             // 预请求方法和允许的路径直接通过
+            isValidate=true;
             response.setStatus(HttpServletResponse.SC_OK);
             filterChain.doFilter(request,response);
         }else{

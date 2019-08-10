@@ -1,5 +1,6 @@
 package com.crow.webmagic.pageprocessor;
 
+import com.crow.entity.Post;
 import com.crow.utils.ProxyGeneratedUtil;
 import com.crow.utils.URLGeneratedUtil;
 import com.crow.utils.UserAgentUtil;
@@ -91,8 +92,9 @@ public class HupuNBAPageProcessor extends BaseProcessor {//修改改类，定制
         String mainImage = page.getHtml().xpath("/html/body/div[4]/div[1]/div[2]/div/div[1]/img/@src").toString();
         //新闻时间
         String newsDate = page.getHtml().xpath("//*[@id=\"pubtime_baidu\"]/text()").toString();
-
-        setPost(title, content, comFrom, mainImage, newsDate, page, "yyyy-MM-dd HH:mm:ss","sport");
+        Post post = new Post();
+        post=setPost(title, content, comFrom, mainImage, newsDate, page, "yyyy-MM-dd HH:mm:ss","sport",post);
+        page.putField("postInfo", post);
     }
 
 

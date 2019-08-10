@@ -10,7 +10,9 @@ import org.springframework.stereotype.Service;
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 
 
 /**
@@ -31,7 +33,7 @@ public class RecommendService {
 //
 //    }
 
-    private List<Integer> getRecommend(Integer userid, AlgorithmType algorithm, LabelType labelType, String operation) throws Exception {
+    public List<Integer> getRecommend(Integer userid, AlgorithmType algorithm, LabelType labelType,String operation)  {
         List<Integer> reconmmendLists = new ArrayList<Integer>();
         String useridstr = null;
         try {
@@ -39,42 +41,40 @@ public class RecommendService {
         }catch (Exception e){
             logger.error("userid 转换出错！");
         }
-        String[] arguments = new String[] {"D:\\workapp\\anaconda\\anacoonda3\\python.exe",(algorithm.getAlgorithmType()),useridstr,labelType.getLabel(),operation};   //这里构建要在cmd中输入的参数，第二个参数表示.py文件的路径，第二个之后的参数都表示要传给.py文件的参数，可以根据.py文件的需求写
+        Process process;
+        String line =null;
+        BufferedReader in;
+        String[] arguments = new String[] {"python",pythonRoute+(algorithm.getAlgorithmType()),useridstr,labelType.getLabel(),operation};   //这里构建要在cmd中输入的参数，第二个参数表示.py文件的路径，第二个之后的参数都表示要传给.py文件的参数，可以根据.py文件的需求写
         try {
-            Process process = Runtime.getRuntime().exec(arguments);//这个方法相当于在cmd中输入 python D:\\ccc\\1.py D:/ccc/
-            BufferedReader in = new BufferedReader(new InputStreamReader(process.getInputStream()));
-            String line = null;
+            process = Runtime.getRuntime().exec(arguments);
+            in = new BufferedReader(new InputStreamReader(process.getInputStream()));
+//            Process process = Runtime.getRuntime().exec(arguments);//这个方法相当于在cmd中输入 python D:\\ccc\\1.py D:/ccc/
             while ((line = in.readLine()) != null) {
-//                line.substring(1,line.length()-1);
-//                String[] recommendIds=line.split(",");
-//                for(int i=0;i<recommendIds.length;i++){
-//                    if(recommendIds[i]!=null){
-//                        reconmmendLists.add(Integer.valueOf(recommendIds[i]));
-//                    }
-//                }
-                 System.out.print(line);
-                //这里把字符串解析成数组后再转换成List<integer>类型
-                logger.info("算法结果："+line);  //在java编译器中打印.py文件的执行结果
+                System.out.println(line);
+                line = line.substring(1,line.length()-1);
+                System.out.println(line);
+                if(line!=null) {
+                    reconmmendLists = Arrays.asList(line.split(",")).stream().map(s -> Integer.parseInt(s.trim())).collect(Collectors.toList());
+                }
+                in.close();
+                int re = process.waitFor();//因为是process这个进程调用.py文件， 所以要将当前进程阻塞等待.py文件执行完毕， 若果.py文件成功运行完毕，此方法将返回0，代表执行成功
+                System.out.println(re); //执行成功的话这里会打印一个0，否则会打印1，2或者其他数字
+
             }
-            in.close();
-            int re = process.waitFor();//因为是process这个进程调用.py文件， 所以要将当前进程阻塞等待.py文件执行完毕， 若果.py文件成功运行完毕，此方法将返回0，代表执行成功
-            System.out.println(re); //执行成功的话这里会打印一个0，否则会打印1，2或者其他数字
-        } catch (Exception e) {
+        }
+        catch (Exception e)
+        {
+            logger.error("pyhon执行异常！");
             e.printStackTrace();
         }
+
         return reconmmendLists;
     }
 
     public static void main(String[] args) {
-        RecommendService recommendService = new RecommendService();
-        try {
-//            recommendService.getRecommend(1,"mostPopular_recommend.py","sport","fresh");
-              recommendService.getRecommend(1,AlgorithmType.HOT_BASED_RECOMMEND,LabelType.SPORT_COLOUMN,"fresh");
-
-        }catch (Exception e){
-            logger.error(e.getMessage());
-        }
-
+        String ids= "1, 22, 33, 4 , 5 , 6";
+        List<Long> listIds = Arrays.asList(ids.split(",")).stream().map(s -> Long.parseLong(s.trim())).collect(Collectors.toList());
+        System.out.println(Arrays.toString(listIds .toArray()));
     }
 }
 

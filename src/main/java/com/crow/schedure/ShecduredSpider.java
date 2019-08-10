@@ -12,6 +12,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
+import org.springframework.stereotype.Component;
 import us.codecraft.webmagic.Spider;
 import us.codecraft.webmagic.downloader.HttpClientDownloader;
 import us.codecraft.webmagic.downloader.selenium.SeleniumDownloader;
@@ -21,16 +22,17 @@ import us.codecraft.webmagic.proxy.Proxy;
  * @ClassName:ShecduredSpider
  * @Author: wuy2
  * @Description: DONE
- * @Date: Created in 19:40 2019/8/8
+ * @Date: Created in 19:55 2019/8/8
  * @Version: V1.0
  */
+@Component
 public class ShecduredSpider {
     private static Logger logger = LoggerFactory.getLogger(ShecduredSpider.class);
     @Autowired
     HupuSpiderPipeline hupuSpiderPipeline;
     @Autowired
     NewsListMapper newsListMapper;
-    @Scheduled(cron = "0 0 0-23/1 * * *") // 0-24点每整点执行一次
+    @Scheduled(cron = "0 0/10 0/1 * * ? ") // 0-24点每整点执行一次
     public void shecduredRunSpider(){
         HttpClientDownloader httpClientDownloader = new HttpClientDownloader();
         //设置动态转发代理，使用定制的ProxyProvider
@@ -43,7 +45,7 @@ public class ShecduredSpider {
         catch (Exception e){
             logger.error("新浪chrome模拟浏览失败");
         }
-        waitSpider(10000);
+        waitSpider(1000000);
         FreshUtil.freshline=newsListMapper.selectMaxId();
 
     }
@@ -52,12 +54,12 @@ public class ShecduredSpider {
         Spider SinaSpider ;
         SinaSpider = unionConfigSpider(new SinaSpiderProcessor(),
                 "http://ent.sina.com.cn/weibo/",
-                new HupuSpiderPipeline(),
+                hupuSpiderPipeline,
                 1);
         SinaSpider.setDownloader(new SeleniumDownloader("C:\\Program Files (x86)\\Google\\Chrome\\Application\\chromedriver.exe"));
         SinaSpider.start();
         logger.info("Spider start！");
-        waitSpider(10000);
+        waitSpider(10000000);
         SinaSpider.stop();
         logger.info("Spider stop！");
     }
@@ -65,12 +67,12 @@ public class ShecduredSpider {
     private void startChinaSpider() {
         Spider chinaSpider ;
         chinaSpider = unionConfigSpider(new ChinaPeapleProcessor(),
-                "http://sousuo.gov.cn/column/30611/0.htm",
-                new HupuSpiderPipeline(),
+                "http://sousuo.gov.cn/column/30611/6.htm",
+                hupuSpiderPipeline,
                 1);
         chinaSpider.start();
         logger.info("Spider start！");
-        waitSpider(10000);
+        waitSpider(10000000);
         chinaSpider.stop();
         logger.info("Spider stop！");
     }
@@ -78,10 +80,10 @@ public class ShecduredSpider {
         Spider hupuSpider ;
         hupuSpider = unionConfigSpider(new HupuNBAPageProcessor(),
                 "https://voice.hupu.com/nba/1",
-                new HupuSpiderPipeline(),
+                hupuSpiderPipeline,
                 1);
         hupuSpider.start();
-        waitSpider(10000);
+        waitSpider(100000000);
         logger.error("hupuSpider stop！");
         hupuSpider.stop();
 

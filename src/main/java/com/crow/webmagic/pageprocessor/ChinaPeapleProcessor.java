@@ -1,5 +1,6 @@
 package com.crow.webmagic.pageprocessor;
 
+import com.crow.entity.Post;
 import com.crow.utils.ProxyGeneratedUtil;
 import com.crow.utils.URLGeneratedUtil;
 import com.crow.utils.UserAgentUtil;
@@ -94,14 +95,15 @@ public class ChinaPeapleProcessor extends BaseProcessor {
         //评论数
         String sourceCommentNum =  page.getHtml().xpath("//*[@id=\"bottom_sina_comment\"]/div[1]/div[1]/span[1]/em[1]/a/text()").toString();
         //主题词
-        String topicWord =null;
+        String topicWord ="新华快讯";
         if(title.length()>4){
              topicWord = title.substring(0,3);
         }
 
-
-        setPost(title, content, comFrom, mainImage,newsDate,sourceCommentNum,
-                topicWord,page,"yyyy-MM-dd HH:mm:ss","politics");
+        Post post = new Post();
+        post = setPost(title, content, comFrom, mainImage,newsDate,sourceCommentNum,
+                topicWord,page,"yyyy-MM-dd HH:mm:ss","politics",post);
+        page.putField("postInfo", post);
 
     }
 
