@@ -187,12 +187,13 @@ public class NewsService {
         newsDetailResult.setContents(contents);
 
         // 使用模糊查询功能获取固定的4篇相关文章的列表没有相关的则返回空
-        List<NewsList> newsLists=null;
+/*        List<NewsList> newsLists=null;
         if(newsMainInfo!=null){
             newsLists=newsListMapper.selectNewsListWhereTitleLike((String)newsMainInfo.getTitle(),0,4);
             if(newsLists==null || newsLists.isEmpty())
                 newsLists=new ArrayList<NewsList>();
-        }
+        }*/
+        List<NewsList> newsLists=new ArrayList<NewsList>();
         List<NewsListResult> relations=newsLists2NewsListResults(newsLists);
         newsDetailResult.setRelations(relations);
 

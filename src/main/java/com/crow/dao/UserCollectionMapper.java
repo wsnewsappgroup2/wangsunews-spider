@@ -19,6 +19,6 @@ public interface UserCollectionMapper {
             @Param("userId")Integer userId,
             @Param("newsId")Integer newsId);
 
-    @Select("SELECT COUNT(*) FROM `user_collection` WHERE `user_id`=#{userId} AND `news_id`=#{#newsId}")
+    @Select("SELECT COUNT(*) FROM `user_collection` WHERE `user_id`=#{userId} AND `news_id`=#{newsId}")
     Integer selectIsCollected(@Param("userId")Integer userId,@Param("newsId")Integer newsId);
 }

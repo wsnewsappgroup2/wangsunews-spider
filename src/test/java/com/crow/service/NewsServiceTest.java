@@ -1,13 +1,42 @@
 package com.crow.service;
 
+import com.alibaba.fastjson.JSONObject;
+import com.crow.dao.ContentDetailMapper;
+import com.crow.dao.NewsListMapper;
+import com.crow.dao.UserCollectionMapper;
+import com.crow.dao.UserThumbsUpMapper;
+import com.crow.entity.ContentDetail;
+import com.crow.entity.NewsList;
+import com.crow.result.CommonResult;
+import com.crow.result.NewsDetailResult;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.junit4.SpringRunner;
+
+import java.util.List;
+
 /**
  * Created by wangyq1
  */
-//@RunWith(SpringRunner.class)
-//@SpringBootTest
+@RunWith(SpringRunner.class)
+@SpringBootTest
 public class NewsServiceTest {
-//    @Autowired
-//    NewsService newsService;
+    @Autowired
+    NewsService newsService;
+
+    @Autowired
+    NewsListMapper newsListMapper;
+
+    @Autowired
+    ContentDetailMapper contentDetailMapper;
+
+    @Autowired
+    UserThumbsUpMapper userThumbsUpMapper;
+
+    @Autowired
+    UserCollectionMapper userCollectionMapper;
 //
 //    /**获取用户列表单元测试**/
 //    @Test
@@ -34,11 +63,15 @@ public class NewsServiceTest {
 //        System.out.println(JSONObject.toJSONString(result));
 //    }
 //
-//    /**测试新闻详情页**/
-//    @Test
-//    public void testGetSingleNewsContentById(){
-//        // news_id 88 对应的内容id是86
-//        CommonResult<NewsDetailResult> result= newsService.getSingleNewsContentById(88);
-//        System.out.println(JSONObject.toJSONString(result));
-//    }
+    /**测试新闻详情页**/
+    @Test
+   public void testGetSingleNewsContentById(){
+        // news_id 88 对应的内容id是86
+        int newsId=746;
+        NewsList newsMainInfo=newsListMapper.selectNewsListBynewsId(newsId);
+        List<ContentDetail> details=contentDetailMapper.selectContentDetailsByNewsId(newsId);
+        Integer x=userThumbsUpMapper.selectIsThumbsUp(1,newsId);
+        Integer y=userCollectionMapper.selectIsCollected(1,newsId);
+        return;
+    }
 }
