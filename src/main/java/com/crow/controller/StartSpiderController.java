@@ -20,7 +20,6 @@ import us.codecraft.webmagic.proxy.Proxy;
  * @Author: wuy2
  * @Description: DONE
  * @Date: Created in 08：00 2019/8/5
- * @Version: V1.0
  */
 @RestController
 public class StartSpiderController {
