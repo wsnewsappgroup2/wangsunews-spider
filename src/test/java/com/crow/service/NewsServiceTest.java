@@ -15,6 +15,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -72,6 +73,10 @@ public class NewsServiceTest {
         List<ContentDetail> details=contentDetailMapper.selectContentDetailsByNewsId(newsId);
         Integer x=userThumbsUpMapper.selectIsThumbsUp(1,newsId);
         Integer y=userCollectionMapper.selectIsCollected(1,newsId);
+        List<Integer> list=new ArrayList<Integer>();
+        list.add(1);
+        list.add(2);
+        List<NewsList> recommendedNewsList=newsListMapper.selectNewsListByNewsIds(list);
         return;
     }
 }
