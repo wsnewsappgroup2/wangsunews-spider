@@ -30,9 +30,22 @@ public class LoginService {
     /**静默登录授权获取返回包括openid**/
     public JSONObject silentLogin(String code){
         // 向微信请求授权登录
-        JSONObject validateResult= validateByWechat(code);
-        int errorCode=validateResult.getIntValue("errcode");
+        JSONObject validateResult=null;
+        try {
+            validateResult= validateByWechat(code);
+        }catch (NullPointerException e){
+            logger.error("微信授权API调用 HTTP请求失败 ",e);
+        }
 
+        if(validateResult==null){
+            JSONObject response=new JSONObject();
+            response.put("msg","Cannot Get Validate Info From Wechat");
+            response.put("token",null);
+            response.put("success",false);
+            return response;
+        }
+
+        int errorCode=validateResult.getIntValue("errcode");
         JSONObject validateResponse=new JSONObject();
         if(errorCode!=0){
             // 登录授权失败响应
