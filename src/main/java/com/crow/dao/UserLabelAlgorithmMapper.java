@@ -29,7 +29,7 @@ public interface UserLabelAlgorithmMapper {
 
 
     /**通过栏目ID查出可选的所有算法*/
-    @Select("SELECT algorithm.* FROM " +
+    @Select("SELECT al.* FROM " +
             "`label_algorithm` la LEFT JOIN `algorithm` al ON la.algorithm_id=al.id " +
             "WHERE `label_id`=#{labelId}")
     List<Algorithm> selectCloumnedList(@Param("labelId") Integer labelId);
