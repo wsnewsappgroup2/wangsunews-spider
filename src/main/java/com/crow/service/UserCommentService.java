@@ -33,12 +33,14 @@ public class UserCommentService {
 
         // 封装并返回
         CommonResult<List<NewsCommentResult>> commonResult=new CommonResult<List<NewsCommentResult>>();
-        commonResult.setData(newsCommentResults);
-        commonResult.setSuccess(newsCommentResults!=null);
         if(newsCommentResults!=null){
-            commonResult.setMsg("成功获取用户评论列表");
+            commonResult.setSuccess(true);
+            commonResult.setData(newsCommentResults);
+            commonResult.setMsg("成功获取此新闻下的用户评论的列表");
         }else{
-            commonResult.setMsg("获取用户评论列表失败");
+            commonResult.setSuccess(true);
+            commonResult.setData(new ArrayList<>());
+            commonResult.setMsg("获取此新闻下的用户评论列表失败");
         }
 
         return commonResult;

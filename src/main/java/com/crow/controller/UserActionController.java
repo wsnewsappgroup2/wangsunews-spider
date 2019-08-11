@@ -25,18 +25,19 @@ public class UserActionController {
     public String addUserComment(
             @RequestHeader(value = "Authorization",required = false) String token,
             @RequestBody(required=false) Map<String,Object> map){
-        // TODO: 根据接口文档修改返回类型 和 newsId的获取
         String openId= JwtUtil.getOpenid(token);
-        String comment="评论内容";
-        Integer newsId=1;
+        String comment=(String)map.get("comment");
+        Integer newsId=(Integer)map.get("newsId");
         if(openId!=null && newsId!=null){
             userActionSerivce.addNewUserComment(openId,comment,newsId);
             JSONObject response=new JSONObject();
-            response.put("success",true);
+            response.put("status","success");
+            response.put("code","success");
             return response.toJSONString();
         }else{
             JSONObject response=new JSONObject();
-            response.put("success",false);
+            response.put("status","fail");
+            response.put("code","fail");
             return response.toJSONString();
         }
     }
@@ -53,13 +54,13 @@ public class UserActionController {
         if(openId!=null && hasCollect!=null && newsId!=null){
             userActionSerivce.updateNewsCollectedStatus(newsId,hasCollect,openId);
             JSONObject response=new JSONObject();
-            // TODO: 根据接口文档修改
-            response.put("success",true);
+            response.put("status","success");
+            response.put("code","success");
             return response.toJSONString();
         }else{
             JSONObject response=new JSONObject();
-            // TODO: 根据接口文档修改
-            response.put("success",false);
+            response.put("status","fail");
+            response.put("code","fail");
             return response.toJSONString();
         }
     }
@@ -77,13 +78,13 @@ public class UserActionController {
         if(openId!=null && hasThumbUp!=null && newsId!=null){
             userActionSerivce.updateNewsThumbsUpStatus(newsId,hasThumbUp,openId);
             JSONObject response=new JSONObject();
-            // TODO: 根据接口文档修改
-            response.put("success",true);
+            response.put("status","success");
+            response.put("code","success");
             return response.toJSONString();
         }else{
             JSONObject response=new JSONObject();
-            // TODO: 根据接口文档修改
-            response.put("success",false);
+            response.put("status","fail");
+            response.put("code","fail");
             return response.toJSONString();
         }
     }
