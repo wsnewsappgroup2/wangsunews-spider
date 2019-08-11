@@ -112,4 +112,10 @@ public interface NewsListMapper {
     // 根据新闻ID获取最新的栏目标签
     @Select("SELECT `label` FROM `news_list` WHERE id=#{newsId}")
     String selectNewsLabelById(@Param("newsId")Integer newsId);
+
+
+    @Select("SELECT * FROM `news_list` ORDER BY `news_date` DESC LIMIT #{start},#{pageSize}")
+    List<NewsList> selectLatestPagedList(
+            @Param("start")Integer start,
+            @Param("pageSize")Integer pageSize);
 }

@@ -97,7 +97,11 @@ public class NewsService {
         List<NewsList> newsLists=null;
         int start= page==null? 0: page*pageSize;
         // 具体栏目列表
-        newsLists=newsListMapper.selectPagedNewsListByLabelId(columnId,start,pageSize);
+        if(columnId==1){
+            newsLists=newsListMapper.selectLatestPagedList(start,pageSize);
+        }else{
+            newsLists=newsListMapper.selectPagedNewsListByLabelId(columnId,start,pageSize);
+        }
 
         CommonResult<List<NewsListResult>> commonResult=new CommonResult<List<NewsListResult>>();
         List<NewsListResult> newsListResults=new ArrayList<>();
