@@ -55,7 +55,7 @@ public class TokenFilter implements Filter {
     @Override
     public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain) throws IOException, ServletException {
         doFilterByToken(servletRequest,servletResponse,filterChain);
-        // filterChain.doFilter(servletRequest,servletResponse);
+        //filterChain.doFilter(servletRequest,servletResponse);
     }
 
     @Override
@@ -90,7 +90,7 @@ public class TokenFilter implements Filter {
         }
 
         if(!isValidate){
-            response401(servletRequest, servletResponse, resultInfo);
+            response401(servletRequest,servletResponse,resultInfo);
         }else{
             filterChain.doFilter(request, response);
         }
