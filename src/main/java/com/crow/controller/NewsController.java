@@ -72,8 +72,9 @@ public class NewsController {
     /**单个新闻信息页**/
     @GetMapping(value = "/wsnews/news/news_info/{newsId}")
     public CommonResult<NewsDetailResult> getSingleNew(
+            @RequestHeader(value = "Authorization",required = false) String token,
             @PathVariable("newsId") Integer newsId){
-        return newsService.getSingleNewsContentById(newsId);
+        return newsService.getSingleNewsContentById(newsId,token);
     }
 
 
