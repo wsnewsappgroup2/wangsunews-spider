@@ -1,8 +1,11 @@
 package com.crow.filter;
 
 import com.alibaba.fastjson.JSON;
+import com.crow.controller.TestController;
 import com.crow.result.ResultInfo;
 import com.crow.utils.JwtUtil;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.core.annotation.Order;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
@@ -30,8 +33,8 @@ import java.util.Set;
  */
 @WebFilter(urlPatterns = "/*")
 @Order(3)
-@Component
 public class TokenFilter implements Filter {
+    private static Logger logger = LoggerFactory.getLogger(TokenFilter.class);
     private static final Set<String> ALLOWED_PATHS =
             Collections.unmodifiableSet(
                     new HashSet<>(
@@ -111,11 +114,11 @@ public class TokenFilter implements Filter {
             printWriter.close();
             outputStreamWriter.close();
         } catch (UnsupportedEncodingException e) {
+            logger.error("过滤器返回信息失败:",e);
             throw e;
-            //logger.error("过滤器返回信息失败:" + e.getMessage(), e);
         } catch (IOException e) {
+            logger.error("过滤器返回信息失败:",e);
             throw e;
-            //logger.error("过滤器返回信息失败:" + e.getMessage(), e);
         } finally {
             if (null != printWriter) {
                 printWriter.close();

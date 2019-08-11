@@ -32,4 +32,10 @@ public interface UserMapper {
     void inserDefaultUserColumnMapping(
             @Param("openId") String openId,
             @Param("labelId") Integer labelId);
+
+    @Select("SELECT `id` FROM `user` WHERE `openid`=#{openId}")
+    Integer selectUserIdByOpenId(@Param("openId")String openId);
+
+    @Select("SELECT `nick_name` FROM `user` WHERE `openid`=#{openId}")
+    String selectNickNameByOpenId(@Param("openId")String openId);
 }
