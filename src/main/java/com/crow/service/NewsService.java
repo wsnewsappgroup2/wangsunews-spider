@@ -3,18 +3,24 @@ package com.crow.service;
 import com.alibaba.fastjson.JSONObject;
 import com.crow.dao.ContentDetailMapper;
 import com.crow.dao.NewsListMapper;
+import com.crow.dao.UserMapper;
 import com.crow.entity.ContentDetail;
 import com.crow.entity.NewsList;
+import com.crow.entity.User;
 import com.crow.entity.custom.ColumnInfoCustom;
 import com.crow.entity.custom.PersonalColumnInfoCustom;
+import com.crow.enums.AlgorithmType;
+import com.crow.enums.LabelType;
+import com.crow.result.ColumnsInfoResult;
 import com.crow.result.CommonResult;
 import com.crow.result.NewsDetailResult;
 import com.crow.result.NewsListResult;
-import com.crow.result.ColumnsInfoResult;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 /**
  * Created by wangyq1
@@ -27,6 +33,12 @@ public class NewsService {
 
     @Autowired
     ContentDetailMapper contentDetailMapper;
+
+    @Autowired
+    UserMapper userMapper;
+
+    @Autowired
+    RecommendService recommendService;
 
     /**获取用户个人收藏的栏目列表**/
     public ColumnsInfoResult getPersonalColums(String openid){
@@ -115,7 +127,17 @@ public class NewsService {
     /**对特定的栏目执行推荐算法做推荐**/
     public CommonResult<List<NewsListResult>> getRecommendedNewsListByColumnId(Integer columnId,String openId){
         // TODO: 添加推荐算法的调用<到时注意是否有多线程异步等待或者等该过慢的问题>
-        List<Integer> mockRecomendedNewsIds=new ArrayList<Integer>(Arrays.asList(new Integer[]{1,2,3,4,5,6,7,8,9,10}));
+        //先保证能默认调到算法
+        // TODO：通过columnId找到label
+        //通过openid找到用户id
+        List<User> users=userMapper.getUser(openId);
+        List<Integer> mockRecomendedNewsIds;
+        if(!(users==null || users.isEmpty())) {
+            mockRecomendedNewsIds=recommendService.getRecommend(users.get(0).getId(), AlgorithmType.HOT_BASED_RECOMMEND, LabelType.SPORT_COLOUMN,"1");
+        }
+        else{
+            mockRecomendedNewsIds=null;// Todo:改成获取数据库数据
+        }
 
         List<NewsList> recommendedNewsList=newsListMapper.selectNewsListByNewsIds(mockRecomendedNewsIds);
 
