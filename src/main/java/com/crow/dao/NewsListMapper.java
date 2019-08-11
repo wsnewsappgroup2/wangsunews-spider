@@ -61,7 +61,7 @@ public interface NewsListMapper {
     @Select({"<script> ",
                 "SELECT * FROM `news_list` ",
                 "WHERE news_list.id IN",
-                "<foreach collection='newsIds' item='newsId' open='(' separator=',' close=')'> ",
+                "<foreach collection='newsIds' item='newsId' open='(' separator=',' close=')'>",
                     "#{newsId}",
                 "</foreach>",
             "</script>"
