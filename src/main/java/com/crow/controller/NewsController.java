@@ -70,7 +70,7 @@ public class NewsController {
     }
 
     /**单个新闻信息页**/
-    @GetMapping(value = "/wsnews/news_info/{newsId}")
+    @GetMapping(value = "/wsnews/news/news_info/{newsId}")
     public CommonResult<NewsDetailResult> getSingleNew(
             @PathVariable("newsId") Integer newsId){
         return newsService.getSingleNewsContentById(newsId);

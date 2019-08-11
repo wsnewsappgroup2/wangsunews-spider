@@ -63,6 +63,7 @@ public class LoginService {
                     userMapper.inserDefaultUserColumnMapping(openid,2);
                     userMapper.inserDefaultUserColumnMapping(openid,3);
                     userMapper.inserDefaultUserColumnMapping(openid,4);
+                    // TODO: 给用户添加默认的启用栏目算法
                 }
                 validateResponse.put("token",token);
                 validateResponse.put("success",true);
