@@ -85,6 +85,20 @@ public interface NewsListMapper {
             @Param("limit")Integer limit);
 
 
+    // 根据新闻标题和内容或标题进行模糊查询
+    @Select("SELECT nl.* " +
+            "FROM news_list nl LEFT JOIN content_detail cd " +
+            "ON nl.id=cd.news_id " +
+            "WHERE nl.title LIKE CONCAT('%',#{keyword},'%') " +
+            "ORDER BY nl.news_date DESC " +
+            "LIMIT #{start},#{limit}")
+    @ResultMap("newsListResultsMap")
+    List<NewsList> selectNewsListWhereTitleLike(
+            @Param("keyword") String keyword,
+            @Param("start") Integer start,
+            @Param("limit")Integer limit);
+
+
     // 通过新闻ID查询新闻的主要信息
     @Select("SELECT * FROM `news_list` WHERE `id`=#{newsId}")
     @ResultMap("newsListResultsMap")
