@@ -31,12 +31,12 @@ public class UserActionController {
         if(openId!=null && newsId!=null){
             userActionSerivce.addNewUserComment(openId,comment,newsId);
             JSONObject response=new JSONObject();
-            response.put("status","success");
+            response.put("success","success");
             response.put("code","success");
             return response.toJSONString();
         }else{
             JSONObject response=new JSONObject();
-            response.put("status","fail");
+            response.put("success","fail");
             response.put("code","fail");
             return response.toJSONString();
         }
@@ -54,12 +54,12 @@ public class UserActionController {
         if(openId!=null && hasCollect!=null && newsId!=null){
             userActionSerivce.updateNewsCollectedStatus(newsId,hasCollect,openId);
             JSONObject response=new JSONObject();
-            response.put("status","success");
+            response.put("success","success");
             response.put("code","success");
             return response.toJSONString();
         }else{
             JSONObject response=new JSONObject();
-            response.put("status","fail");
+            response.put("success","fail");
             response.put("code","fail");
             return response.toJSONString();
         }
@@ -78,12 +78,12 @@ public class UserActionController {
         if(openId!=null && hasThumbUp!=null && newsId!=null){
             userActionSerivce.updateNewsThumbsUpStatus(newsId,hasThumbUp,openId);
             JSONObject response=new JSONObject();
-            response.put("status","success");
+            response.put("success","success");
             response.put("code","success");
             return response.toJSONString();
         }else{
             JSONObject response=new JSONObject();
-            response.put("status","fail");
+            response.put("success","fail");
             response.put("code","fail");
             return response.toJSONString();
         }

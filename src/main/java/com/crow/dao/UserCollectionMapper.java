@@ -14,7 +14,7 @@ public interface UserCollectionMapper {
             @Param("newsId")Integer newsId);
 
 
-    @Delete("DELETE FROM `user_collection` WHERE `user_id`=#{userId} AND `news_id`=#{#newsId}")
+    @Delete("DELETE FROM `user_collection` WHERE `user_id`=#{userId} AND `news_id`=#{newsId}")
     void deleteNewsCollectionById(
             @Param("userId")Integer userId,
             @Param("newsId")Integer newsId);

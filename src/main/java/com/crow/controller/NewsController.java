@@ -39,14 +39,13 @@ public class NewsController {
         return newsService.getAllColumns();
     }
 
-    /**获取目标栏目下的（含推荐栏目）的新闻列表**/
+    /**(上拉)获取目标栏目下的（含推荐栏目）的新闻列表**/
     @GetMapping(value = "/wsnews/query_news/{columnId}/{page}/{pagesize}")
     public CommonResult<List<NewsListResult>> getNewsListInColumn(
             @RequestHeader(value = "Authorization",required = false) String token,
             @PathVariable(value = "columnId",required = false) Integer columnId,
             @PathVariable(value = "page",required = false) Integer page,
             @PathVariable(value = "pagesize",required = false) Integer pageSize){
-        // TODO: 进阶：使用token获取openid进而查询相关的表进行推荐
         return newsService.getNewsListByColumn(columnId,page,pageSize);
     }
 
@@ -74,6 +73,7 @@ public class NewsController {
     public CommonResult<NewsDetailResult> getSingleNew(
             @RequestHeader(value = "Authorization",required = false) String token,
             @PathVariable("newsId") Integer newsId){
+        newsService.addNewClickRecord(token,newsId);
         return newsService.getSingleNewsContentById(newsId,token);
     }
 

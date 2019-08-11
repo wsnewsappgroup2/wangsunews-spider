@@ -19,6 +19,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -44,6 +45,9 @@ public class NewsService {
 
     @Autowired
     UserCollectionMapper userCollectionMapper;
+
+    @Autowired
+    UserClicksMapper userClicksMapper;
 
     /**获取用户个人收藏的栏目列表**/
     public ColumnsInfoResult getPersonalColums(String openid){
@@ -98,11 +102,11 @@ public class NewsService {
         CommonResult<List<NewsListResult>> commonResult=new CommonResult<List<NewsListResult>>();
         List<NewsListResult> newsListResults=new ArrayList<>();
         if(newsLists==null || newsLists.isEmpty()){
-            commonResult.setMsg("无推荐新闻");
+            commonResult.setMsg("没有更多了");
             commonResult.setSuccess(false);
         }else{
             newsListResults=newsLists2NewsListResults(newsLists);
-            commonResult.setMsg("成功推荐新闻");
+            commonResult.setMsg("成功获取");
             commonResult.setSuccess(true);
         }
         commonResult.setData(newsListResults);
@@ -131,7 +135,7 @@ public class NewsService {
 
     /**对特定的栏目执行推荐算法做推荐**/
     public CommonResult<List<NewsListResult>> getRecommendedNewsListByColumnId(Integer columnId,String openId){
-        // TODO: 添加推荐算法的调用<到时注意是否有多线程异步等待或者等该过慢的问题>
+
         //先保证能默认调到算法
         // TODO：通过columnId找到label
         //通过openid找到用户id
@@ -141,8 +145,10 @@ public class NewsService {
             mockRecomendedNewsIds=recommendService.getRecommend(users.get(0).getId(), AlgorithmType.HOT_BASED_RECOMMEND, LabelType.SPORT_COLOUMN,"1");
         }
         else{
-            mockRecomendedNewsIds=null;// Todo:改成获取数据库数据
+            // Todo:改成获取数据库数据
+            mockRecomendedNewsIds=null;
         }
+
 
         List<NewsList> recommendedNewsList=newsListMapper.selectNewsListByNewsIds(mockRecomendedNewsIds);
 
@@ -213,6 +219,17 @@ public class NewsService {
         commonResult.setSuccess(true);
         commonResult.setMsg("成功获取新闻详情页");
         return commonResult;
+    }
+
+
+    // 添加用户的点击记录功能
+    public void addNewClickRecord(String token,Integer newsId){
+        Integer userId=userMapper.selectUserIdByOpenId(JwtUtil.getOpenid(token));
+        if(userId==null || newsId==null){
+            return;
+        }
+        String label=newsListMapper.selectNewsLabelById(newsId);
+        userClicksMapper.inserClicksRecord(userId,newsId,new Date(),label);
     }
 
 

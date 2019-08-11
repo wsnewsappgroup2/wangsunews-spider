@@ -14,7 +14,7 @@ public interface UserThumbsUpMapper {
             @Param("newsId")Integer newsId);
 
 
-    @Delete("DELETE FROM `user_thumbsup` WHERE `user_id`=#{userId} AND `news_id`=#{#newsId}")
+    @Delete("DELETE FROM `user_thumbsup` WHERE `user_id`=#{userId} AND `news_id`=#{newsId}")
     void deleteNewsThumbsUpById(
             @Param("userId")Integer userId,
             @Param("newsId")Integer newsId);

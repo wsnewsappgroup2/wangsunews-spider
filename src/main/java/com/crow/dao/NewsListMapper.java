@@ -108,4 +108,8 @@ public interface NewsListMapper {
     // 获取最大的新闻ID
     @Select("SELECT MAX(`id`) FROM news_list")
     Integer selectMaxId();
+
+    // 根据新闻ID获取最新的栏目标签
+    @Select("SELECT `label` FROM `news_list` WHERE id=#{newsId}")
+    String selectNewsLabelById(@Param("newsId")Integer newsId);
 }
