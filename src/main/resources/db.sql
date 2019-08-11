@@ -107,4 +107,35 @@ CREATE TABLE IF NOT EXISTS `user_thumbsup`(
 
 
 
+-- 算法表
+CREATE TABLE IF NOT EXISTS `algorithm`(
+  `id` int(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
+  `algorithm` varchar(256) NOT NULL,
+  `algorithm_ch` varchar(256) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=UTF8_UNICODE_CI;
+INSERT INTO `algorithm`(`algorithm`,`algorithm_ch`,`contributor`,`description`) VALUES ('mostPopular_recommend\.py','热点新闻推荐算法','网宿科技','Hot-Based Recommendation');
+INSERT INTO `algorithm`(`algorithm`,`algorithm_ch`,`contributor`,`description`) VALUES ('content_recommend\.py','基于内同相似度推荐算法','网宿科技','Content-Based Recommendation');
+INSERT INTO `algorithm`(`algorithm`,`algorithm_ch`,`contributor`,`description`) VALUES ('ucf_recommend\.py','协同过滤算法','网宿科技','Collaboratice Filtering');
 
+
+-- 栏目下可选算法表
+CREATE TABLE IF NOT EXISTS `label_algorithm` (
+  `id` INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
+  `label_id` INT(11) NOT NULL,
+  `algorithm_id` INT(11) NOT NULL,
+  CONSTRAINT FOREIGN KEY(`label_id`) REFERENCES `label_column_mapping`(`label_id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT FOREIGN KEY(`algorithm_id`) REFERENCES `algorithm`(`id`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=UTF8_UNICODE_CI;
+
+
+
+-- 用户 栏目 算法关联表
+CREATE TABLE IF NOT EXISTS `user_label_al` (
+  `id` INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
+  `user_id` INT(11) NOT NULL,
+  `label_id` int(11) NOT NULL,
+  `algorithm_id` int(11) NOT NULL,
+  CONSTRAINT FOREIGN KEY(`user_id`) REFERENCES `user`(`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT FOREIGN KEY(`label_id`) REFERENCES `label_column_mapping`(`label_id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT FOREIGN KEY(`algorithm_id`) REFERENCES `algorithm`(`id`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=UTF8_UNICODE_CI;
