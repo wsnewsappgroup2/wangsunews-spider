@@ -205,8 +205,8 @@ public class NewsService {
         newsDetailResult.setLabels(topicWordsList);
 
         // 获取点赞状态和收藏状态
-        newsDetailResult.setHasThumbUp(userThumbsUpMapper.selectIsThumbsUp(newsId,userId)>0);
-        newsDetailResult.setHasCollect(userCollectionMapper.selectIsCollected(newsId,userId)>0);
+        newsDetailResult.setHasThumbUp(userThumbsUpMapper.selectIsThumbsUp(userId,newsId)>0);
+        newsDetailResult.setHasCollect(userCollectionMapper.selectIsCollected(userId,newsId)>0);
 
         commonResult.setData(newsDetailResult);
         commonResult.setSuccess(true);
