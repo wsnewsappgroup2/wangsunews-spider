@@ -28,8 +28,8 @@ public class CommonTest {
     @Test
     public void TT(){
         Integer d= userLabelAlgorithmMapper.selectAlgorithmUsedCount(1);
-        userLabelAlgorithmMapper.updateUserLabelAlgorithm(1,1,1);
         List<Algorithm>s=userLabelAlgorithmMapper.selectCloumnedList(1);
+        userLabelAlgorithmMapper.updateUserLabelAlgorithm(1,1,1);
         return;
     }
 }

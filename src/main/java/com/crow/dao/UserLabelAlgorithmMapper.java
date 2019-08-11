@@ -40,7 +40,7 @@ public interface UserLabelAlgorithmMapper {
 
 
     /**应用场景：更新用户可显示栏目/更新用户栏目对应算法*/
-    @Update("UPDATE `user_label_algorithm` " +
+    @Update("UPDATE `user_label_al` " +
             "SET `algorithm_id` = #{algorithmId}  " +
             "WHERE `user_id`=#{userId} AND `label_id`=#{labelId}")
     void updateUserLabelAlgorithm(
