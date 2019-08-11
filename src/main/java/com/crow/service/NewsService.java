@@ -1,9 +1,7 @@
 package com.crow.service;
 
 import com.alibaba.fastjson.JSONObject;
-import com.crow.dao.ContentDetailMapper;
-import com.crow.dao.NewsListMapper;
-import com.crow.dao.UserMapper;
+import com.crow.dao.*;
 import com.crow.entity.ContentDetail;
 import com.crow.entity.NewsList;
 import com.crow.entity.User;
@@ -15,6 +13,7 @@ import com.crow.result.ColumnsInfoResult;
 import com.crow.result.CommonResult;
 import com.crow.result.NewsDetailResult;
 import com.crow.result.NewsListResult;
+import com.crow.utils.JwtUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -39,6 +38,12 @@ public class NewsService {
 
     @Autowired
     RecommendService recommendService;
+
+    @Autowired
+    UserThumbsUpMapper userThumbsUpMapper;
+
+    @Autowired
+    UserCollectionMapper userCollectionMapper;
 
     /**获取用户个人收藏的栏目列表**/
     public ColumnsInfoResult getPersonalColums(String openid){
@@ -157,9 +162,10 @@ public class NewsService {
     }
 
     /**根据新闻ID获取新闻的具体内容**/
-    public CommonResult<NewsDetailResult> getSingleNewsContentById(Integer newsId){
+    public CommonResult<NewsDetailResult> getSingleNewsContentById(Integer newsId,String token){
         CommonResult<NewsDetailResult> commonResult=new CommonResult<>();
         NewsDetailResult newsDetailResult=new NewsDetailResult();
+        Integer userId=userMapper.selectUserIdByOpenId(JwtUtil.getOpenid(token));
 
         // 获取目标新闻的主要信息
         NewsList newsMainInfo=newsListMapper.selectNewsListBynewsId(newsId);
@@ -198,9 +204,9 @@ public class NewsService {
         }
         newsDetailResult.setLabels(topicWordsList);
 
-        // TODO: 待自测后加入相应的逻辑
-        newsDetailResult.setHasThumbUp(false);
-        newsDetailResult.setHasCollect(false);
+        // 获取点赞状态和收藏状态
+        newsDetailResult.setHasThumbUp(userThumbsUpMapper.selectIsThumbsUp(newsId,userId)>0);
+        newsDetailResult.setHasCollect(userCollectionMapper.selectIsCollected(newsId,userId)>0);
 
         commonResult.setData(newsDetailResult);
         commonResult.setSuccess(true);

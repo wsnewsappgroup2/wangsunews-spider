@@ -88,6 +88,9 @@ public class HupuNBAPageProcessor extends BaseProcessor {//修改改类，定制
         String comFrom = page.getHtml().xpath("//span[@class='comeFrom']//a/text()").toString();
         //新闻内容
         String content = page.getHtml().xpath("/html/body/div[4]/div[1]/div[2]/div/div[2]/p/text()").all().toString();
+        if(content!=null&&content.length()>2){
+            content=content.substring(1,content.length()-1);
+        }
         //新闻主图
         String mainImage = page.getHtml().xpath("/html/body/div[4]/div[1]/div[2]/div/div[1]/img/@src").toString();
         //新闻时间

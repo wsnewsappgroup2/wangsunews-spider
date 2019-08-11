@@ -18,4 +18,7 @@ public interface UserThumbsUpMapper {
     void deleteNewsThumbsUpById(
             @Param("userId")Integer userId,
             @Param("newsId")Integer newsId);
+
+    @Select("SELECT COUNT(*) FROM `user_thumbsup` WHERE `user_id`=#{userId} AND `news_id`=#{#newsId}")
+    Integer selectIsThumbsUp(@Param("userId")Integer userId, @Param("newsId")Integer newsId);
 }
