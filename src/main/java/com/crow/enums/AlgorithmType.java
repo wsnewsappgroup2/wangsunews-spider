@@ -13,4 +13,6 @@ public enum AlgorithmType {
     public String getAlgorithmType() {
         return algorithmType;
     }
+
+
 }

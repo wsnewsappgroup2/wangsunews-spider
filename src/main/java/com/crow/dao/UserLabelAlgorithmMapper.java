@@ -52,4 +52,20 @@ public interface UserLabelAlgorithmMapper {
             @Param("algorithmId") int algorithmId);
 
 
+    @Select("SELECT `lcm`.`label` " +
+            "FROM `user_label_al` ula LEFT JOIN `label_column_mapping` lcm " +
+            "ON ula.label_id=lcm.label_id " +
+            "WHERE ull.label_id=#{columnId} AND ull.user_id=#{userId}")
+    String selectLabelByColumnId(
+            @Param("userId")Integer userId,
+            @Param("columnId")Integer columnId);
+
+    @Select("SELECT `al`.`algorithm` " +
+            "FROM `user_label_al` ull LEFT JOIN `algorithm` al " +
+            "ON ull.algorithm_id=al.id " +
+            "WHERE ull.label_id=#{columnId} AND ull.user_id=#{userId}")
+    String selectAlgorithmPath(
+            @Param("userId")Integer userId,
+            @Param("columnId")Integer columnId);
+
 }

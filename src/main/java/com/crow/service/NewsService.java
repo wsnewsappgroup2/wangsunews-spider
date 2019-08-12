@@ -49,6 +49,9 @@ public class NewsService {
     @Autowired
     UserClicksMapper userClicksMapper;
 
+    @Autowired
+    UserLabelAlgorithmMapper userLabelAlgorithmMapper;
+
     /**获取用户个人收藏的栏目列表**/
     public ColumnsInfoResult getPersonalColums(String openid){
         ColumnsInfoResult<List<PersonalColumnInfoCustom>> columnsInfoResult =new ColumnsInfoResult<List<PersonalColumnInfoCustom>>();
@@ -139,12 +142,19 @@ public class NewsService {
     public CommonResult<List<NewsListResult>> getRecommendedNewsListByColumnId(Integer columnId,String openId){
 
         //先保证能默认调到算法
-        // TODO：通过columnId找到label
-        //通过openid找到用户id
+        Integer userId=userMapper.selectUserIdByOpenId(openId);
+
+        String label= userLabelAlgorithmMapper.selectLabelByColumnId(userId,columnId);
+        LabelType type=LabelType.getlabelType(label);
+
+        String algorithmPath=userLabelAlgorithmMapper.selectAlgorithmPath(userId,columnId);
+
         List<User> users=userMapper.getUser(openId);
         List<Integer> mockRecomendedNewsIds;
         if(!(users==null || users.isEmpty())) {
-            mockRecomendedNewsIds=recommendService.getRecommend(users.get(0).getId(), AlgorithmType.HOT_BASED_RECOMMEND, LabelType.SPORT_COLOUMN,"1");
+            //mockRecomendedNewsIds=recommendService.getRecommend(users.get(0).getId(), AlgorithmType.HOT_BASED_RECOMMEND, LabelType.SPORT_COLOUMN,"1");
+            mockRecomendedNewsIds=recommendService.getRecommend(users.get(0).getId(), AlgorithmType.HOT_BASED_RECOMMEND, type,"1");
+
         }
         else{
             // Todo:改成获取数据库数据

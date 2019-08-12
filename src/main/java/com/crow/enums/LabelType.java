@@ -16,4 +16,14 @@ public enum LabelType {
     public String getLabel() {
         return label;
     }
+
+    public static LabelType getlabelType(String label){
+        LabelType type=LabelType.SPORT_COLOUMN;
+        for(LabelType labelType:LabelType.values()){
+            if(label.equals(labelType.getLabel())){
+                type=labelType;
+            }
+        }
+        return type;
+    }
 }
