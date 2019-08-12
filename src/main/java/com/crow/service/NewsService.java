@@ -97,11 +97,9 @@ public class NewsService {
         List<NewsList> newsLists=null;
         int start= page==null? 0: page*pageSize;
         // 具体栏目列表
-        if(columnId==1){
-            newsLists=newsListMapper.selectLatestPagedList(start,pageSize);
-        }else{
-            newsLists=newsListMapper.selectPagedNewsListByLabelId(columnId,start,pageSize);
-        }
+        if(columnId==1)
+            columnId=2;
+        newsLists=newsListMapper.selectPagedNewsListByLabelId(columnId,start,pageSize);
 
         CommonResult<List<NewsListResult>> commonResult=new CommonResult<List<NewsListResult>>();
         List<NewsListResult> newsListResults=new ArrayList<>();
@@ -197,13 +195,13 @@ public class NewsService {
         newsDetailResult.setContents(contents);
 
         // 使用模糊查询功能获取固定的4篇相关文章的列表没有相关的则返回空
-/*        List<NewsList> newsLists=null;
+        List<NewsList> newsLists=null;
         if(newsMainInfo!=null){
-            newsLists=newsListMapper.selectNewsListWhereTitleLike((String)newsMainInfo.getTitle(),0,4);
+            newsLists=newsListMapper.selectLatestPagedList(0,3);
             if(newsLists==null || newsLists.isEmpty())
                 newsLists=new ArrayList<NewsList>();
-        }*/
-        List<NewsList> newsLists=new ArrayList<NewsList>();
+        }
+
         List<NewsListResult> relations=newsLists2NewsListResults(newsLists);
         newsDetailResult.setRelations(relations);
 

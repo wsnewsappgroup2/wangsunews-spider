@@ -35,7 +35,7 @@ public class AlgorithmService {
             ColumnedAlgorithmResult car=JSONObject.parseObject(JSONObject.toJSONString(algorithm),ColumnedAlgorithmResult.class);
             // TODO: 清除硬编码
             car.setUserate("80%");
-            car.setApplied(userLabelAlgorithmMapper.selectAlgorithmUsedCount(columnId)>0);
+            car.setApplied(userLabelAlgorithmMapper.selectAlgorithmUsedCount(algorithm.getId())>0);
             car.setTags(Arrays.asList(new String[] {"通用"}));
             results.add(car);
         }

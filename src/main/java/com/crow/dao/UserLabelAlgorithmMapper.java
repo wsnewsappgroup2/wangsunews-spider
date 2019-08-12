@@ -32,10 +32,13 @@ public interface UserLabelAlgorithmMapper {
     @Select("SELECT al.* FROM " +
             "`label_algorithm` la LEFT JOIN `algorithm` al ON la.algorithm_id=al.id " +
             "WHERE `label_id`=#{labelId}")
+    @Results(value={
+            @Result(property = "algorithmCH",column = "algorithm_ch"),
+            @Result(property = "targetTypes",column = "target_types")})
     List<Algorithm> selectCloumnedList(@Param("labelId") Integer labelId);
 
 
-    @Select("SELECT COUNT(*) FROM `user_label_al` WHERE id=#{alId}")
+    @Select("SELECT COUNT(*) FROM `user_label_al` WHERE `algorithm_id`=#{alId}")
     Integer selectAlgorithmUsedCount(@Param("alId")Integer alId);
 
 
